@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import ProductCard from "@/components/ProductCard";
 import { getApiUrl } from "../../lib/api";
 
@@ -21,6 +22,15 @@ export default function HomePage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [isSignedIn, setIsSignedIn] = useState(false);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    // Check for token in localStorage
+    const token = localStorage.getItem("token");
+    setIsSignedIn(!!token);
+  }, []);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -39,6 +49,14 @@ export default function HomePage() {
     fetchProducts();
   }, []);
 
+  const handleStartBidding = () => {
+    if (isSignedIn) {
+      router.push("/auctions"); // Redirect to the auctions page
+    } else {
+      router.push("/signin"); // Redirect to the signin page
+    }
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       {/* Hero Section */}
@@ -50,12 +68,12 @@ export default function HomePage() {
         <p className="text-lg text-gray-500 mb-6">
           Bid smart. Win big. Explore high-demand items in real time.
         </p>
-        <a
-          href="/auctions"
+        <button
+          onClick={handleStartBidding}
           className="bg-blue-600 text-white px-6 py-3 rounded-xl shadow hover:bg-blue-700 transition"
         >
           Start Bidding
-        </a>
+        </button>
       </section>
 
       {/* Live Auctions */}
@@ -78,7 +96,7 @@ export default function HomePage() {
               startingPrice={Number(product.startingPrice) || 0}
               status={product.status}
               createdAt={product.createdAt}
-              endsAt={product.updatedAt} // or whichever field you want
+              endsAt={product.updatedAt}
             />
           ))}
         </div>
