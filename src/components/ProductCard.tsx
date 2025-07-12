@@ -34,10 +34,11 @@ const ProductCard = ({
     <div className="bg-white rounded-2xl shadow hover:shadow-lg transition overflow-hidden border border-gray-100">
       <div className="relative">
         <img
-          src={image}
+          src={image || "/images/default.jpg"}
           alt={title}
           className="w-full h-48 object-cover rounded-t-2xl"
         />
+
         <span
           className={`absolute top-2 left-2 text-xs font-semibold px-3 py-1 rounded-full ${
             status === "ACTIVE"

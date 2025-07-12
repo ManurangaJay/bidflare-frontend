@@ -27,19 +27,48 @@ export default function HomePage() {
   const router = useRouter();
 
   useEffect(() => {
-    // Check for token in localStorage
-    const token = localStorage.getItem("token");
-    setIsSignedIn(!!token);
-  }, []);
-
-  useEffect(() => {
     const fetchProducts = async () => {
       try {
+        console.log("Fetching products...");
         const res = await fetch(getApiUrl("/products"));
         if (!res.ok) throw new Error("Failed to load products");
-        const data = await res.json();
-        setProducts(data);
+        const data: Product[] = await res.json();
+        console.log("Products fetched:", data);
+
+        // Fetch image metadata for each product
+        const enrichedProducts = await Promise.all(
+          data.map(async (product) => {
+            try {
+              console.log(`Fetching image for product ${product.id}...`);
+              const imageRes = await fetch(
+                getApiUrl(`/product-images/${product.id}`)
+              );
+              if (!imageRes.ok) {
+                console.warn(`Image fetch failed for product ${product.id}`);
+                throw new Error();
+              }
+              const imageData = await imageRes.json();
+              console.log(`Image data for product ${product.id}:`, imageData);
+              const imageUrl = imageData[0]?.imageUrl || "/images/default.jpg";
+              console.log(
+                `Using image URL for product ${product.id}:`,
+                imageUrl
+              );
+              // Store only the relative imageUrl here
+              return { ...product, image: imageUrl };
+            } catch (error) {
+              console.warn(
+                `Error fetching image for product ${product.id}, using default`
+              );
+              return { ...product, image: "/images/default.jpg" };
+            }
+          })
+        );
+
+        console.log("Enriched products with images:", enrichedProducts);
+        setProducts(enrichedProducts);
       } catch (err: any) {
+        console.error("Error fetching products:", err);
         setError(err.message || "Unexpected error");
       } finally {
         setLoading(false);
@@ -86,19 +115,34 @@ export default function HomePage() {
         {error && <p className="text-red-600">Error: {error}</p>}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {products.map((product) => (
-            <ProductCard
-              key={product.id}
-              id={product.id}
-              title={product.title}
-              description={product.description}
-              image={product.image || "/images/default.jpg"}
-              startingPrice={Number(product.startingPrice) || 0}
-              status={product.status}
-              createdAt={product.createdAt}
-              endsAt={product.updatedAt}
-            />
-          ))}
+          {products.map((product) => {
+            const imageUrl = product.image
+              ? product.image.startsWith("http")
+                ? product.image
+                : `http://localhost:8080${
+                    product.image.startsWith("/") ? "" : "/"
+                  }${product.image}`
+              : "/images/default.jpg";
+
+            console.log(
+              `Rendering product ${product.id} with image URL:`,
+              imageUrl
+            );
+
+            return (
+              <ProductCard
+                key={product.id}
+                id={product.id}
+                title={product.title}
+                description={product.description}
+                image={imageUrl}
+                startingPrice={Number(product.startingPrice) || 0}
+                status={product.status}
+                createdAt={product.createdAt}
+                endsAt={product.updatedAt}
+              />
+            );
+          })}
         </div>
       </section>
     </div>
