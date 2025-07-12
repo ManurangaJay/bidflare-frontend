@@ -27,6 +27,10 @@ export default function HomePage() {
   const router = useRouter();
 
   useEffect(() => {
+    // Check for JWT token on mount
+    const token = localStorage.getItem("token");
+    setIsSignedIn(!!token);
+
     const fetchProducts = async () => {
       try {
         console.log("Fetching products...");
@@ -80,9 +84,9 @@ export default function HomePage() {
 
   const handleStartBidding = () => {
     if (isSignedIn) {
-      router.push("/auctions"); // Redirect to the auctions page
+      router.push("/auctions"); // Redirect to auctions page
     } else {
-      router.push("/signin"); // Redirect to the signin page
+      router.push("/signin"); // Redirect to signin page
     }
   };
 
