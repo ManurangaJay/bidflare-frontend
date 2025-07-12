@@ -52,27 +52,18 @@ const Navbar = () => {
                 key={link.name}
                 href={link.href}
                 className="text-gray-700 hover:text-blue-600 font-medium transition"
-                onClick={() => setMobileMenuOpen(false)}
               >
                 {link.name}
               </Link>
             ))}
 
             {isSignedIn && (
-              <>
-                <Link
-                  href="/start"
-                  className="bg-blue-600 text-white px-4 py-2 rounded-xl shadow hover:bg-blue-700 transition"
-                >
-                  Start Bidding
-                </Link>
-                <button
-                  onClick={handleSignOut}
-                  className="ml-4 bg-red-600 text-white px-4 py-2 rounded-xl shadow hover:bg-red-700 transition"
-                >
-                  Sign Out
-                </button>
-              </>
+              <button
+                onClick={handleSignOut}
+                className="bg-red-600 text-white px-4 py-2 rounded-xl shadow hover:bg-red-700 transition"
+              >
+                Sign Out
+              </button>
             )}
           </div>
 
@@ -103,21 +94,12 @@ const Navbar = () => {
           ))}
 
           {isSignedIn && (
-            <>
-              <Link
-                href="/start"
-                className="block bg-blue-600 text-white text-center px-4 py-2 rounded-xl mt-2 hover:bg-blue-700 transition"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Start Bidding
-              </Link>
-              <button
-                onClick={handleSignOut}
-                className="w-full bg-red-600 text-white py-2 rounded-xl mt-2 hover:bg-red-700 transition"
-              >
-                Sign Out
-              </button>
-            </>
+            <button
+              onClick={handleSignOut}
+              className="w-full bg-red-600 text-white py-2 rounded-xl mt-2 hover:bg-red-700 transition"
+            >
+              Sign Out
+            </button>
           )}
         </div>
       )}
