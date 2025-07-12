@@ -30,8 +30,26 @@ export default function AuctionsPage() {
       try {
         const res = await fetch(getApiUrl("/products"));
         if (!res.ok) throw new Error("Failed to load products");
-        const data = await res.json();
-        setProducts(data);
+        const data: Product[] = await res.json();
+
+        // Fetch image metadata for each product
+        const enrichedProducts = await Promise.all(
+          data.map(async (product) => {
+            try {
+              const imageRes = await fetch(
+                getApiUrl(`/product-images/${product.id}`)
+              );
+              if (!imageRes.ok) throw new Error("Image not found");
+              const imageData = await imageRes.json();
+              const imageUrl = imageData[0]?.imageUrl || "/images/default.jpg";
+              return { ...product, image: imageUrl };
+            } catch {
+              return { ...product, image: "/images/default.jpg" };
+            }
+          })
+        );
+
+        setProducts(enrichedProducts);
       } catch (err: any) {
         setError(err.message || "Unexpected error");
       } finally {
@@ -69,19 +87,29 @@ export default function AuctionsPage() {
       {error && <p className="text-red-600 text-center">Error: {error}</p>}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {currentProducts.map((product) => (
-          <ProductCard
-            key={product.id}
-            id={product.id}
-            title={product.title}
-            description={product.description}
-            image={product.image || "/images/default.jpg"}
-            startingPrice={Number(product.startingPrice)}
-            status={product.status}
-            createdAt={product.createdAt}
-            endsAt={product.updatedAt}
-          />
-        ))}
+        {currentProducts.map((product) => {
+          const imageUrl = product.image
+            ? product.image.startsWith("http")
+              ? product.image
+              : `http://localhost:8080${
+                  product.image.startsWith("/") ? "" : "/"
+                }${product.image}`
+            : "/images/default.jpg";
+
+          return (
+            <ProductCard
+              key={product.id}
+              id={product.id}
+              title={product.title}
+              description={product.description}
+              image={imageUrl}
+              startingPrice={Number(product.startingPrice)}
+              status={product.status}
+              createdAt={product.createdAt}
+              endsAt={product.updatedAt}
+            />
+          );
+        })}
       </div>
 
       {/* Pagination Controls */}
