@@ -20,7 +20,7 @@ export default function GlobalError({
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-12">
       <div className="max-w-md w-full text-center">
         <Image
-          src="/images/error-illustration.svg" // Optional SVG in /public/images/
+          src="/error-illustration.svg"
           alt="Error Illustration"
           width={300}
           height={300}

@@ -3,20 +3,42 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
+import { getUserFromToken } from "../../utils/getUserFromToken";
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isSignedIn, setIsSignedIn] = useState(false);
+  const [userRole, setUserRole] = useState<string | null>(null);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    setIsSignedIn(!!token);
+    const user = getUserFromToken();
+    if (user?.role) {
+      setIsSignedIn(true);
+      setUserRole(user.role.toUpperCase());
+    }
   }, []);
 
-  const signedInLinks = [
+  const buyerLinks = [
     { name: "Home", href: "/" },
     { name: "Auctions", href: "/auctions" },
     { name: "My Bids", href: "/my-bids" },
+    { name: "Watchlist", href: "/watchlist" },
+    { name: "Profile", href: "/profile" },
+  ];
+
+  const sellerLinks = [
+    { name: "Home", href: "/" },
+    { name: "My Products", href: "/seller/products" },
+    { name: "Create Listing", href: "/seller/create" },
+    { name: "My Auctions", href: "/seller/auctions" },
+    { name: "Analytics", href: "/seller/analytics" },
+    { name: "Profile", href: "/profile" },
+  ];
+
+  const adminLinks = [
+    { name: "Dashboard", href: "/admin" },
+    { name: "Users", href: "/admin/users" },
+    { name: "Reports", href: "/admin/reports" },
     { name: "Profile", href: "/profile" },
   ];
 
@@ -28,9 +50,19 @@ const Navbar = () => {
   const handleSignOut = () => {
     localStorage.removeItem("token");
     setIsSignedIn(false);
+    setUserRole(null);
     setMobileMenuOpen(false);
     window.location.href = "/";
   };
+
+  const getMenuLinks = () => {
+    if (!isSignedIn) return signedOutLinks;
+    if (userRole === "SELLER") return sellerLinks;
+    if (userRole === "ADMIN") return adminLinks;
+    return buyerLinks;
+  };
+
+  const menuLinks = getMenuLinks();
 
   return (
     <nav className="bg-white shadow-md sticky top-0 z-50">
@@ -47,7 +79,7 @@ const Navbar = () => {
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-6">
-            {(isSignedIn ? signedInLinks : signedOutLinks).map((link) => (
+            {menuLinks.map((link) => (
               <Link
                 key={link.name}
                 href={link.href}
@@ -56,7 +88,6 @@ const Navbar = () => {
                 {link.name}
               </Link>
             ))}
-
             {isSignedIn && (
               <button
                 onClick={handleSignOut}
@@ -82,7 +113,7 @@ const Navbar = () => {
       {/* Mobile Dropdown Menu */}
       {mobileMenuOpen && (
         <div className="md:hidden bg-white border-t px-4 pb-4 space-y-2 shadow-sm">
-          {(isSignedIn ? signedInLinks : signedOutLinks).map((link) => (
+          {menuLinks.map((link) => (
             <Link
               key={link.name}
               href={link.href}
