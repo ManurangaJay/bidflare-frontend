@@ -28,10 +28,10 @@ const Navbar = () => {
 
   const sellerLinks = [
     { name: "Home", href: "/" },
-    { name: "My Products", href: "/seller/products" },
-    { name: "Create Listing", href: "/seller/create" },
-    { name: "My Auctions", href: "/seller/auctions" },
-    { name: "Analytics", href: "/seller/analytics" },
+    { name: "My Products", href: "/my-products" },
+    { name: "Create Listing", href: "/create-listing" },
+    { name: "My Auctions", href: "/my-auctions" },
+    { name: "Analytics", href: "/analytics" },
     { name: "Profile", href: "/profile" },
   ];
 

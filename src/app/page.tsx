@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import ProductCard from "@/components/ProductCard";
 import { getApiUrl } from "../../lib/api";
+import { getUserFromToken } from "../../utils/getUserFromToken";
 
 type Product = {
   id: string;
@@ -22,57 +23,42 @@ export default function HomePage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [isSignedIn, setIsSignedIn] = useState(false);
+  const [userRole, setUserRole] = useState<string | null>(null);
 
   const router = useRouter();
 
   useEffect(() => {
-    // Check for JWT token on mount
-    const token = localStorage.getItem("token");
-    setIsSignedIn(!!token);
+    // Get role from token
+    const user = getUserFromToken();
+    if (user?.role) {
+      setUserRole(user.role.toUpperCase());
+    }
 
     const fetchProducts = async () => {
       try {
-        console.log("Fetching products...");
         const res = await fetch(getApiUrl("/products"));
         if (!res.ok) throw new Error("Failed to load products");
         const data: Product[] = await res.json();
-        console.log("Products fetched:", data);
 
-        // Fetch image metadata for each product
+        // Fetch images for products
         const enrichedProducts = await Promise.all(
           data.map(async (product) => {
             try {
-              console.log(`Fetching image for product ${product.id}...`);
               const imageRes = await fetch(
                 getApiUrl(`/product-images/${product.id}`)
               );
-              if (!imageRes.ok) {
-                console.warn(`Image fetch failed for product ${product.id}`);
-                throw new Error();
-              }
+              if (!imageRes.ok) throw new Error();
               const imageData = await imageRes.json();
-              console.log(`Image data for product ${product.id}:`, imageData);
               const imageUrl = imageData[0]?.imageUrl || "/images/default.jpg";
-              console.log(
-                `Using image URL for product ${product.id}:`,
-                imageUrl
-              );
-              // Store only the relative imageUrl here
               return { ...product, image: imageUrl };
-            } catch (error) {
-              console.warn(
-                `Error fetching image for product ${product.id}, using default`
-              );
+            } catch {
               return { ...product, image: "/images/default.jpg" };
             }
           })
         );
 
-        console.log("Enriched products with images:", enrichedProducts);
         setProducts(enrichedProducts);
       } catch (err: any) {
-        console.error("Error fetching products:", err);
         setError(err.message || "Unexpected error");
       } finally {
         setLoading(false);
@@ -83,16 +69,16 @@ export default function HomePage() {
   }, []);
 
   const handleStartBidding = () => {
-    if (isSignedIn) {
-      router.push("/auctions"); // Redirect to auctions page
+    if (userRole) {
+      router.push("/auctions");
     } else {
-      router.push("/signin"); // Redirect to signin page
+      router.push("/signin");
     }
   };
 
-  return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      {/* Hero Section */}
+  // Render Buyer Homepage
+  const BuyerHome = () => (
+    <>
       <section className="text-center py-16">
         <h1 className="text-4xl sm:text-5xl font-bold text-gray-800 mb-4">
           Discover Exclusive Auctions on{" "}
@@ -109,46 +95,89 @@ export default function HomePage() {
         </button>
       </section>
 
-      {/* Live Auctions */}
       <section className="py-10">
         <h2 className="text-2xl font-semibold text-gray-800 mb-6">
-          🔥 Live Auctions
+          🔥 Ending Soon
         </h2>
-
         {loading && <p className="text-gray-500">Loading...</p>}
         {error && <p className="text-red-600">Error: {error}</p>}
-
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {products.map((product) => {
-            const imageUrl = product.image
-              ? product.image.startsWith("http")
+          {products
+            .filter((p) => p.status === "LISTED")
+            .slice(0, 8)
+            .map((product) => {
+              const imageUrl = product.image?.startsWith("http")
                 ? product.image
                 : `http://localhost:8080${
-                    product.image.startsWith("/") ? "" : "/"
-                  }${product.image}`
-              : "/images/default.jpg";
-
-            console.log(
-              `Rendering product ${product.id} with image URL:`,
-              imageUrl
-            );
-
-            return (
-              <ProductCard
-                key={product.id}
-                id={product.id}
-                title={product.title}
-                description={product.description}
-                image={imageUrl}
-                startingPrice={Number(product.startingPrice) || 0}
-                status={product.status}
-                createdAt={product.createdAt}
-                endsAt={product.updatedAt}
-              />
-            );
-          })}
+                    product.image?.startsWith("/") ? "" : "/"
+                  }${product.image}`;
+              return (
+                <ProductCard
+                  key={product.id}
+                  id={product.id}
+                  title={product.title}
+                  description={product.description}
+                  image={imageUrl}
+                  startingPrice={Number(product.startingPrice) || 0}
+                  status={product.status}
+                  createdAt={product.createdAt}
+                  endsAt={product.updatedAt}
+                />
+              );
+            })}
         </div>
       </section>
+    </>
+  );
+
+  // Render Seller Homepage
+  const SellerHome = () => (
+    <section className="py-16 max-w-3xl mx-auto text-center px-4">
+      <h1 className="text-4xl font-bold text-gray-800 mb-6">
+        Welcome back, Seller! 🚀
+      </h1>
+      <p className="text-lg text-gray-600 mb-8">
+        At BidFlare, we empower sellers like you to reach thousands of eager
+        buyers quickly and easily. Manage your auctions, track sales, and grow
+        your business all in one place.
+      </p>
+
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10">
+        <div className="bg-orange-50 p-6 rounded-lg shadow">
+          <h3 className="font-semibold text-xl mb-2">Reach Thousands</h3>
+          <p className="text-gray-700 text-sm">
+            Get your products in front of a large audience of enthusiastic
+            bidders.
+          </p>
+        </div>
+        <div className="bg-orange-50 p-6 rounded-lg shadow">
+          <h3 className="font-semibold text-xl mb-2">Easy Auction Setup</h3>
+          <p className="text-gray-700 text-sm">
+            List your products with simple tools and flexible auction options.
+          </p>
+        </div>
+        <div className="bg-orange-50 p-6 rounded-lg shadow">
+          <h3 className="font-semibold text-xl mb-2">Track & Manage</h3>
+          <p className="text-gray-700 text-sm">
+            Monitor bids, sales, and performance all from your dashboard.
+          </p>
+        </div>
+      </div>
+
+      <div className="space-x-4">
+        <button
+          onClick={() => router.push("/products/new")}
+          className="bg-blue-600 text-white px-6 py-3 rounded-xl shadow hover:bg-blue-700 transition"
+        >
+          List a New Product
+        </button>
+      </div>
+    </section>
+  );
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {userRole === "SELLER" && <SellerHome />}
+      {(userRole === "BUYER" || userRole === null) && <BuyerHome />}
     </div>
   );
 }
