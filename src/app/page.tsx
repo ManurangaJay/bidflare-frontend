@@ -121,7 +121,6 @@ export default function HomePage() {
                   startingPrice={Number(product.startingPrice) || 0}
                   status={product.status}
                   createdAt={product.createdAt}
-                  endsAt={product.updatedAt}
                 />
               );
             })}
@@ -166,7 +165,7 @@ export default function HomePage() {
 
       <div className="space-x-4">
         <button
-          onClick={() => router.push("/products/new")}
+          onClick={() => router.push("/create-listing")}
           className="bg-blue-600 text-white px-6 py-3 rounded-xl shadow hover:bg-blue-700 transition"
         >
           List a New Product
