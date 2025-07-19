@@ -9,10 +9,17 @@ type ProductCardProps = {
   startingPrice?: number | null;
   status: string;
   createdAt: string;
-  endsAt: string;
 };
 
 const isValidDate = (date: Date) => !isNaN(date.getTime());
+
+// Convert title to URL-safe path
+const slugify = (text: string) =>
+  text
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, "")
+    .replace(/\s+/g, "-");
 
 const ProductCard = ({
   id,
@@ -22,13 +29,11 @@ const ProductCard = ({
   startingPrice,
   status,
   createdAt,
-  endsAt,
 }: ProductCardProps) => {
   const safeStartingPrice =
     typeof startingPrice === "number" ? startingPrice : 0;
 
   const createdDate = new Date(createdAt);
-  const endsDate = new Date(endsAt);
 
   return (
     <div className="bg-white rounded-2xl shadow hover:shadow-lg transition overflow-hidden border border-gray-100">
@@ -71,18 +76,11 @@ const ProductCard = ({
           </span>
         </div>
 
-        <p className="text-sm text-gray-400">
-          Ends at:{" "}
-          {isValidDate(endsDate)
-            ? endsDate.toLocaleString()
-            : "End date unavailable"}
-        </p>
-
         <Link
-          href={`/auctions/${id}`}
+          href={`/my-auction/${slugify(title)}`}
           className="inline-block mt-2 text-blue-600 hover:underline text-sm font-medium"
         >
-          View Auction →
+          Manage Auction →
         </Link>
       </div>
     </div>
