@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getApiUrl } from "../../../../lib/api";
 import { authFetch } from "../../../../lib/authFetch";
+import RoleGuard from "@/components/RoleGuard";
 
 type Category = {
   id: string;
@@ -105,159 +106,161 @@ const CreateListing = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-10">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">
-        Create a New Listing
-      </h1>
-      <form
-        onSubmit={handleSubmit}
-        className="grid grid-cols-1 lg:grid-cols-2 gap-8 bg-white p-8 rounded-xl shadow-xl"
-      >
-        {/* Left column - Product Details */}
-        <div className="space-y-6">
-          <div>
-            <h2 className="text-xl font-semibold text-gray-800 mb-2">
-              🛍️ Product Details
-            </h2>
-            <label className="block font-medium text-sm mb-1">Title</label>
-            <input
-              type="text"
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-300"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              required
-            />
-          </div>
+    <RoleGuard allowedRoles={["SELLER"]}>
+      <div className="max-w-6xl mx-auto px-4 py-10">
+        <h1 className="text-3xl font-bold text-gray-800 mb-6">
+          Create a New Listing
+        </h1>
+        <form
+          onSubmit={handleSubmit}
+          className="grid grid-cols-1 lg:grid-cols-2 gap-8 bg-white p-8 rounded-xl shadow-xl"
+        >
+          {/* Left column - Product Details */}
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-xl font-semibold text-gray-800 mb-2">
+                🛍️ Product Details
+              </h2>
+              <label className="block font-medium text-sm mb-1">Title</label>
+              <input
+                type="text"
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-300"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                required
+              />
+            </div>
 
-          <div>
-            <label className="block font-medium text-sm mb-1">
-              Description
-            </label>
-            <textarea
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-300"
-              rows={4}
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              required
-            />
-          </div>
+            <div>
+              <label className="block font-medium text-sm mb-1">
+                Description
+              </label>
+              <textarea
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-300"
+                rows={4}
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                required
+              />
+            </div>
 
-          <div>
-            <label className="block font-medium text-sm mb-1">Category</label>
-            <select
-              value={categoryId}
-              onChange={(e) => setCategoryId(e.target.value)}
-              required
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-300"
-            >
-              <option value="">Select category</option>
-              {categories.map((cat) => (
-                <option key={cat.id} value={cat.id}>
-                  {cat.name}
-                </option>
-              ))}
-            </select>
-          </div>
+            <div>
+              <label className="block font-medium text-sm mb-1">Category</label>
+              <select
+                value={categoryId}
+                onChange={(e) => setCategoryId(e.target.value)}
+                required
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-300"
+              >
+                <option value="">Select category</option>
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.name}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-          <div>
-            <label className="block font-medium text-sm mb-1">Tags</label>
-            <input
-              type="text"
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-300"
-              placeholder="e.g., electronics, gadgets"
-              value={tags}
-              onChange={(e) => setTags(e.target.value)}
-            />
-          </div>
+            <div>
+              <label className="block font-medium text-sm mb-1">Tags</label>
+              <input
+                type="text"
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-300"
+                placeholder="e.g., electronics, gadgets"
+                value={tags}
+                onChange={(e) => setTags(e.target.value)}
+              />
+            </div>
 
-          <div>
-            <label className="block font-medium text-sm mb-1">
-              Starting Price ($)
-            </label>
-            <input
-              type="number"
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-300"
-              value={startingPrice}
-              onChange={(e) => setStartingPrice(e.target.value)}
-              required
-              min="0"
-              step="0.01"
-            />
-          </div>
-        </div>
-
-        {/* Right column - Auction, Media, Settings */}
-        <div className="space-y-6">
-          <div>
-            <h2 className="text-xl font-semibold text-gray-800 mb-2">
-              ⏰ Auction Settings
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block font-medium text-sm mb-1">
-                  Start Time
-                </label>
-                <input
-                  type="datetime-local"
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-300"
-                  value={startTime}
-                  onChange={(e) => setStartTime(e.target.value)}
-                  required
-                />
-              </div>
-              <div>
-                <label className="block font-medium text-sm mb-1">
-                  End Time
-                </label>
-                <input
-                  type="datetime-local"
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-300"
-                  value={endTime}
-                  onChange={(e) => setEndTime(e.target.value)}
-                  required
-                />
-              </div>
+            <div>
+              <label className="block font-medium text-sm mb-1">
+                Starting Price ($)
+              </label>
+              <input
+                type="number"
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-300"
+                value={startingPrice}
+                onChange={(e) => setStartingPrice(e.target.value)}
+                required
+                min="0"
+                step="0.01"
+              />
             </div>
           </div>
 
-          <div>
-            <h2 className="text-xl font-semibold text-gray-800 mb-2">
-              📷 Media Upload
-            </h2>
-            <input
-              type="file"
-              multiple
-              accept="image/*,video/*"
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-300"
-              onChange={handleFileChange}
-            />
+          {/* Right column - Auction, Media, Settings */}
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-xl font-semibold text-gray-800 mb-2">
+                ⏰ Auction Settings
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block font-medium text-sm mb-1">
+                    Start Time
+                  </label>
+                  <input
+                    type="datetime-local"
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-300"
+                    value={startTime}
+                    onChange={(e) => setStartTime(e.target.value)}
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block font-medium text-sm mb-1">
+                    End Time
+                  </label>
+                  <input
+                    type="datetime-local"
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-300"
+                    value={endTime}
+                    onChange={(e) => setEndTime(e.target.value)}
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h2 className="text-xl font-semibold text-gray-800 mb-2">
+                📷 Media Upload
+              </h2>
+              <input
+                type="file"
+                multiple
+                accept="image/*,video/*"
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-300"
+                onChange={handleFileChange}
+              />
+            </div>
+
+            <div className="flex items-center">
+              <input
+                type="checkbox"
+                id="qaToggle"
+                className="mr-2"
+                checked={qaEnabled}
+                onChange={(e) => setQaEnabled(e.target.checked)}
+              />
+              <label htmlFor="qaToggle" className="text-gray-700">
+                Enable Q&A Section (optional)
+              </label>
+            </div>
+
+            {error && <p className="text-red-600 font-medium">{error}</p>}
+
+            <button
+              type="submit"
+              className="bg-blue-600 text-white px-6 py-3 rounded-xl shadow hover:bg-blue-700 transition w-full"
+              disabled={loading}
+            >
+              {loading ? "Creating Listing..." : "Submit Listing"}
+            </button>
           </div>
-
-          <div className="flex items-center">
-            <input
-              type="checkbox"
-              id="qaToggle"
-              className="mr-2"
-              checked={qaEnabled}
-              onChange={(e) => setQaEnabled(e.target.checked)}
-            />
-            <label htmlFor="qaToggle" className="text-gray-700">
-              Enable Q&A Section (optional)
-            </label>
-          </div>
-
-          {error && <p className="text-red-600 font-medium">{error}</p>}
-
-          <button
-            type="submit"
-            className="bg-blue-600 text-white px-6 py-3 rounded-xl shadow hover:bg-blue-700 transition w-full"
-            disabled={loading}
-          >
-            {loading ? "Creating Listing..." : "Submit Listing"}
-          </button>
-        </div>
-      </form>
-    </div>
+        </form>
+      </div>
+    </RoleGuard>
   );
 };
 

@@ -106,7 +106,6 @@ export default function AuctionsPage() {
               startingPrice={Number(product.startingPrice)}
               status={product.status}
               createdAt={product.createdAt}
-              endsAt={product.updatedAt}
             />
           );
         })}

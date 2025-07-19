@@ -41,7 +41,7 @@ const ProductCard = ({
         <img
           src={image || "/images/default.jpg"}
           alt={title}
-          className="w-full h-48 object-cover rounded-t-2xl"
+          className="w-full h-48 object-contain rounded-t-2xl bg-white"
         />
 
         <span

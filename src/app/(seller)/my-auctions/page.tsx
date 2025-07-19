@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import AuctionCard from "@/components/AuctionCard";
 import { Loader2 } from "lucide-react";
 import { authFetch } from "../../../../lib/authFetch";
+import RoleGuard from "@/components/RoleGuard";
 
 type Product = {
   id: string;
@@ -90,52 +91,60 @@ export default function MyAuctionsPage() {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center py-10">
-        <Loader2 className="animate-spin h-6 w-6 text-blue-600" />
-        <span className="ml-2 text-sm text-gray-500">
-          Loading your auctions...
-        </span>
-      </div>
+      <RoleGuard allowedRoles={["SELLER"]}>
+        <div className="flex justify-center items-center py-10">
+          <Loader2 className="animate-spin h-6 w-6 text-blue-600" />
+          <span className="ml-2 text-sm text-gray-500">
+            Loading your auctions...
+          </span>
+        </div>
+      </RoleGuard>
     );
   }
 
   if (error) {
     return (
-      <div className="text-center text-red-600 py-10">
-        <p>⚠️ {error}</p>
-      </div>
+      <RoleGuard allowedRoles={["SELLER"]}>
+        <div className="text-center text-red-600 py-10">
+          <p>⚠️ {error}</p>
+        </div>{" "}
+      </RoleGuard>
     );
   }
 
   if (auctions.length === 0) {
     return (
-      <div className="text-center text-gray-500 py-10">
-        <p>You haven’t created any auctions yet.</p>
-      </div>
+      <RoleGuard allowedRoles={["SELLER"]}>
+        <div className="text-center text-gray-500 py-10">
+          <p>You haven’t created any auctions yet.</p>
+        </div>{" "}
+      </RoleGuard>
     );
   }
 
   return (
-    <div className="px-4 md:px-8 py-6">
-      <h1 className="text-2xl md:text-3xl font-bold mb-6 text-gray-800">
-        My Auctions
-      </h1>
+    <RoleGuard allowedRoles={["SELLER"]}>
+      <div className="px-4 md:px-8 py-6">
+        <h1 className="text-2xl md:text-3xl font-bold mb-6 text-gray-800">
+          My Auctions
+        </h1>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {auctions.map((auction) => (
-          <AuctionCard
-            key={auction.id}
-            id={auction.id}
-            title={auction.title}
-            description={auction.description}
-            image={auction.image}
-            startingPrice={auction.startingPrice}
-            startTime={auction.startTime}
-            endTime={auction.endTime}
-            isClosed={auction.isClosed}
-          />
-        ))}
-      </div>
-    </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {auctions.map((auction) => (
+            <AuctionCard
+              key={auction.id}
+              id={auction.id}
+              title={auction.title}
+              description={auction.description}
+              image={auction.image}
+              startingPrice={auction.startingPrice}
+              startTime={auction.startTime}
+              endTime={auction.endTime}
+              isClosed={auction.isClosed}
+            />
+          ))}
+        </div>
+      </div>{" "}
+    </RoleGuard>
   );
 }
