@@ -1,54 +1,84 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import ProductCard from "@/components/ProductCard";
-import { getApiUrl } from "../../../../lib/api";
 import { authFetch } from "../../../../lib/authFetch";
+import AuctionCard from "@/components/AuctionCard";
+
+type Auction = {
+  id: string;
+  productId: string;
+  startTime: string;
+  endTime: string;
+  isClosed: boolean;
+};
 
 type Product = {
   id: string;
   title: string;
   description: string;
   startingPrice: number;
-  status: string;
-  sellerId: string;
-  categoryId: string;
-  createdAt: string;
-  updatedAt: string;
-  image?: string;
 };
+
+type AuctionWithProduct = Auction & Product & { image: string };
 
 const ITEMS_PER_PAGE = 8;
 
 export default function AuctionsPage() {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [auctions, setAuctions] = useState<AuctionWithProduct[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchAuctions = async () => {
       try {
-        const res = await authFetch("/products");
-        if (!res.ok) throw new Error("Failed to load products");
-        const data: Product[] = await res.json();
+        const res = await authFetch("/auctions");
+        if (!res.ok) throw new Error("Failed to load auctions");
+        const auctionsData: Auction[] = await res.json();
 
-        // Fetch image metadata for each product
-        const enrichedProducts = await Promise.all(
-          data.map(async (product) => {
-            try {
-              const imageRes = await authFetch(`/product-images/${product.id}`);
-              if (!imageRes.ok) throw new Error("Image not found");
-              const imageData = await imageRes.json();
-              const imageUrl = imageData[0]?.imageUrl || "/images/default.jpg";
-              return { ...product, image: imageUrl };
-            } catch {
-              return { ...product, image: "/images/default.jpg" };
-            }
-          })
+        const now = new Date();
+
+        const enriched = await Promise.all(
+          auctionsData
+            .filter((auction) => new Date(auction.endTime) > now)
+            .map(async (auction) => {
+              try {
+                const productRes = await authFetch(
+                  `/products/${auction.productId}`
+                );
+                if (!productRes.ok) throw new Error();
+                const product: Product = await productRes.json();
+
+                let image = "/images/default.jpg";
+                try {
+                  const imageRes = await authFetch(
+                    `/product-images/${product.id}`
+                  );
+                  if (imageRes.ok) {
+                    const imageData = await imageRes.json();
+                    image = imageData[0]?.imageUrl || image;
+                    if (!image.startsWith("http")) {
+                      image = `http://localhost:8080${
+                        image.startsWith("/") ? "" : "/"
+                      }${image}`;
+                    }
+                  }
+                } catch {
+                  return { ...product, image: "/images/default.jpg" };
+                }
+
+                return {
+                  ...auction,
+                  ...product,
+                  image,
+                };
+              } catch {
+                return null;
+              }
+            })
         );
 
-        setProducts(enrichedProducts);
+        setAuctions(enriched.filter(Boolean) as AuctionWithProduct[]);
       } catch (err: any) {
         setError(err.message || "Unexpected error");
       } finally {
@@ -56,11 +86,11 @@ export default function AuctionsPage() {
       }
     };
 
-    fetchProducts();
+    fetchAuctions();
   }, []);
 
-  const totalPages = Math.ceil(products.length / ITEMS_PER_PAGE);
-  const currentProducts = products.slice(
+  const totalPages = Math.ceil(auctions.length / ITEMS_PER_PAGE);
+  const currentAuctions = auctions.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
   );
@@ -78,39 +108,29 @@ export default function AuctionsPage() {
         🔥 Live & Upcoming Auctions
       </h1>
       <p className="text-gray-500 text-center mb-10 max-w-xl mx-auto">
-        Browse all auctions currently open for bidding. New products are added
-        frequently—don’t miss your chance!
+        Browse all auctions currently open for bidding or starting soon. Don’t
+        miss your chance!
       </p>
 
       {loading && <p className="text-gray-500 text-center">Loading...</p>}
       {error && <p className="text-red-600 text-center">Error: {error}</p>}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {currentProducts.map((product) => {
-          const imageUrl = product.image
-            ? product.image.startsWith("http")
-              ? product.image
-              : `http://localhost:8080${
-                  product.image.startsWith("/") ? "" : "/"
-                }${product.image}`
-            : "/images/default.jpg";
-
-          return (
-            <ProductCard
-              key={product.id}
-              id={product.id}
-              title={product.title}
-              description={product.description}
-              image={imageUrl}
-              startingPrice={Number(product.startingPrice)}
-              status={product.status}
-              createdAt={product.createdAt}
-            />
-          );
-        })}
+        {currentAuctions.map((auction) => (
+          <AuctionCard
+            key={auction.id}
+            id={auction.id}
+            title={auction.title}
+            description={auction.description}
+            image={auction.image}
+            startingPrice={auction.startingPrice}
+            startTime={auction.startTime}
+            endTime={auction.endTime}
+            isClosed={auction.isClosed}
+          />
+        ))}
       </div>
 
-      {/* Pagination Controls */}
       {totalPages > 1 && (
         <div className="flex justify-center items-center mt-10 space-x-2">
           <button
