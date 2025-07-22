@@ -1,7 +1,6 @@
+import FooterHome from "@/components/FooterHome";
 import NavbarHome from "@/components/NavbarHome";
-import Footer from "@/components/FooterHome";
 import { Inter } from "next/font/google";
-import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -11,10 +10,10 @@ export default function HomeLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <main className="pt-4">{children}</main>
-      </body>
-    </html>
+    <>
+      <NavbarHome />
+      <main className="pt-4">{children}</main>
+      <FooterHome />
+    </>
   );
 }

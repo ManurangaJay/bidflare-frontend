@@ -2,8 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { getApiUrl } from "../../../../lib/api";
-import { authFetch } from "../../../../lib/authFetch";
+import { getApiUrl } from "../../../../../lib/api";
+import { authFetch } from "../../../../../lib/authFetch";
 import RoleGuard from "@/components/RoleGuard";
 
 type Category = {

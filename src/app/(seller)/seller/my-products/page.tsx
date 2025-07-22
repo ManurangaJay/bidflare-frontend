@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import ProductCard from "@/components/ProductCard";
 import { Loader2 } from "lucide-react";
-import { authFetch } from "../../../../lib/authFetch";
+import { authFetch } from "../../../../../lib/authFetch";
 import RoleGuard from "@/components/RoleGuard";
 
 type Product = {

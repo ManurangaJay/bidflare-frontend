@@ -2,8 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { getUserFromToken } from "../../utils/getUserFromToken";
-import { authFetch } from "../../lib/authFetch";
+import { authFetch } from "../../../../lib/authFetch";
 import AuctionCard from "@/components/AuctionCard";
 
 type Auction = {
@@ -24,22 +23,13 @@ type Product = {
 
 type AuctionWithProduct = Auction & Product;
 
-export default function HomePage() {
+export default function BuyerHomepage() {
   const [auctions, setAuctions] = useState<AuctionWithProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [userRole, setUserRole] = useState<string | null>(null);
-
   const router = useRouter();
 
   useEffect(() => {
-    // Get user role from token
-    const user = getUserFromToken();
-    if (user?.role) {
-      setUserRole(user.role.toUpperCase());
-    }
-
-    // Fetch auctions and enrich with product & image
     const fetchAuctions = async () => {
       try {
         const res = await authFetch("/auctions");
@@ -49,14 +39,12 @@ export default function HomePage() {
         const enriched = await Promise.all(
           auctionsData.map(async (auction) => {
             try {
-              // Fetch product details
               const productRes = await authFetch(
                 `/products/${auction.productId}`
               );
               if (!productRes.ok) throw new Error();
               const product: Product = await productRes.json();
 
-              // Fetch product image
               let image = "/images/default.jpg";
               try {
                 const imageRes = await authFetch(
@@ -71,14 +59,9 @@ export default function HomePage() {
                     }${image}`;
                   }
                 }
-              } catch {
-                return { ...product, image: "/images/default.jpg" };
-              }
-              return {
-                ...auction,
-                ...product,
-                image,
-              };
+              } catch {}
+
+              return { ...auction, ...product, image };
             } catch {
               return null;
             }
@@ -97,16 +80,11 @@ export default function HomePage() {
   }, []);
 
   const handleStartBidding = () => {
-    if (userRole) {
-      router.push("/auctions");
-    } else {
-      router.push("/signin");
-    }
+    router.push("/auctions");
   };
 
-  // Render Buyer Homepage
-  const BuyerHome = () => (
-    <>
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <section className="text-center py-16">
         <h1 className="text-4xl sm:text-5xl font-bold text-gray-800 mb-4">
           Discover Exclusive Auctions on{" "}
@@ -133,77 +111,18 @@ export default function HomePage() {
           {auctions
             .filter((a) => {
               const now = new Date();
-              const start = new Date(a.startTime);
-              const end = new Date(a.endTime);
-              return start <= now && end > now;
+              return new Date(a.startTime) <= now && new Date(a.endTime) > now;
             })
             .slice(0, 8)
             .map((auction) => (
               <AuctionCard
                 key={auction.id}
-                id={auction.id}
-                title={auction.title}
-                description={auction.description}
+                {...auction}
                 image={auction.image || "/images/default.jpg"}
-                startingPrice={auction.startingPrice}
-                startTime={auction.startTime}
-                endTime={auction.endTime}
-                isClosed={auction.isClosed}
               />
             ))}
         </div>
       </section>
-    </>
-  );
-
-  // Render Seller Homepage
-  const SellerHome = () => (
-    <section className="py-16 max-w-3xl mx-auto text-center px-4">
-      <h1 className="text-4xl font-bold text-gray-800 mb-6">
-        Welcome back, Seller! 🚀
-      </h1>
-      <p className="text-lg text-gray-600 mb-8">
-        At BidFlare, we empower sellers like you to reach thousands of eager
-        buyers quickly and easily. Manage your auctions, track sales, and grow
-        your business all in one place.
-      </p>
-
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10">
-        <div className="bg-orange-50 p-6 rounded-lg shadow">
-          <h3 className="font-semibold text-xl mb-2">Reach Thousands</h3>
-          <p className="text-gray-700 text-sm">
-            Get your products in front of a large audience of enthusiastic
-            bidders.
-          </p>
-        </div>
-        <div className="bg-orange-50 p-6 rounded-lg shadow">
-          <h3 className="font-semibold text-xl mb-2">Easy Auction Setup</h3>
-          <p className="text-gray-700 text-sm">
-            List your products with simple tools and flexible auction options.
-          </p>
-        </div>
-        <div className="bg-orange-50 p-6 rounded-lg shadow">
-          <h3 className="font-semibold text-xl mb-2">Track & Manage</h3>
-          <p className="text-gray-700 text-sm">
-            Monitor bids, sales, and performance all from your dashboard.
-          </p>
-        </div>
-      </div>
-
-      <div className="space-x-4">
-        <button
-          onClick={() => router.push("/create-listing")}
-          className="bg-blue-600 text-white px-6 py-3 rounded-xl shadow hover:bg-blue-700 transition"
-        >
-          List a New Product
-        </button>
-      </div>
-    </section>
-  );
-  return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      {userRole === "SELLER" && <SellerHome />}
-      {(userRole === "BUYER" || userRole === null) && <BuyerHome />}
     </div>
   );
 }

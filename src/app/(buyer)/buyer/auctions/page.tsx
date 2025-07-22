@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { authFetch } from "../../../../lib/authFetch";
+import { authFetch } from "../../../../../lib/authFetch";
 import AuctionCard from "@/components/AuctionCard";
 
 type Auction = {

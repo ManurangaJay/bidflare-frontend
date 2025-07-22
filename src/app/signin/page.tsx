@@ -2,11 +2,14 @@
 
 import { useState } from "react";
 import { getApiUrl } from "../../../lib/api";
+import { useRouter } from "next/navigation";
+import { getUserFromToken } from "../../../utils/getUserFromToken";
 
 export default function SignInPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,11 +27,21 @@ export default function SignInPage() {
       }
 
       const data = await res.json();
-      console.log("Success:", data);
-
       localStorage.setItem("token", data.token);
 
-      window.location.href = "/";
+      const user = getUserFromToken();
+      if (!user) {
+        throw new Error("Invalid token");
+      }
+
+      // Redirect based on role
+      if (user.role.toLowerCase() === "seller") {
+        router.push("/seller");
+      } else if (user.role.toLowerCase() === "buyer") {
+        router.push("/buyer");
+      } else {
+        router.push("/");
+      }
     } catch (err: any) {
       setError(err.message);
     }
