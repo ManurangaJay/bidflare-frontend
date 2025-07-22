@@ -2,25 +2,30 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import ProductCard from "@/components/ProductCard";
-import { getApiUrl } from "../../lib/api";
 import { getUserFromToken } from "../../utils/getUserFromToken";
+import { authFetch } from "../../lib/authFetch";
+import AuctionCard from "@/components/AuctionCard";
+
+type Auction = {
+  id: string;
+  productId: string;
+  startTime: string;
+  endTime: string;
+  isClosed: boolean;
+};
 
 type Product = {
   id: string;
   title: string;
   description: string;
   startingPrice: number;
-  status: string;
-  sellerId: string;
-  categoryId: string;
-  createdAt: string;
-  updatedAt: string;
   image?: string;
 };
 
+type AuctionWithProduct = Auction & Product;
+
 export default function HomePage() {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [auctions, setAuctions] = useState<AuctionWithProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [userRole, setUserRole] = useState<string | null>(null);
@@ -28,36 +33,59 @@ export default function HomePage() {
   const router = useRouter();
 
   useEffect(() => {
-    // Get role from token
+    // Get user role from token
     const user = getUserFromToken();
     if (user?.role) {
       setUserRole(user.role.toUpperCase());
     }
 
-    const fetchProducts = async () => {
+    // Fetch auctions and enrich with product & image
+    const fetchAuctions = async () => {
       try {
-        const res = await fetch(getApiUrl("/products"));
-        if (!res.ok) throw new Error("Failed to load products");
-        const data: Product[] = await res.json();
+        const res = await authFetch("/auctions");
+        if (!res.ok) throw new Error("Failed to load auctions");
+        const auctionsData: Auction[] = await res.json();
 
-        // Fetch images for products
-        const enrichedProducts = await Promise.all(
-          data.map(async (product) => {
+        const enriched = await Promise.all(
+          auctionsData.map(async (auction) => {
             try {
-              const imageRes = await fetch(
-                getApiUrl(`/product-images/${product.id}`)
+              // Fetch product details
+              const productRes = await authFetch(
+                `/products/${auction.productId}`
               );
-              if (!imageRes.ok) throw new Error();
-              const imageData = await imageRes.json();
-              const imageUrl = imageData[0]?.imageUrl || "/images/default.jpg";
-              return { ...product, image: imageUrl };
+              if (!productRes.ok) throw new Error();
+              const product: Product = await productRes.json();
+
+              // Fetch product image
+              let image = "/images/default.jpg";
+              try {
+                const imageRes = await authFetch(
+                  `/product-images/${product.id}`
+                );
+                if (imageRes.ok) {
+                  const imageData = await imageRes.json();
+                  image = imageData[0]?.imageUrl || image;
+                  if (!image.startsWith("http")) {
+                    image = `http://localhost:8080${
+                      image.startsWith("/") ? "" : "/"
+                    }${image}`;
+                  }
+                }
+              } catch {
+                return { ...product, image: "/images/default.jpg" };
+              }
+              return {
+                ...auction,
+                ...product,
+                image,
+              };
             } catch {
-              return { ...product, image: "/images/default.jpg" };
+              return null;
             }
           })
         );
 
-        setProducts(enrichedProducts);
+        setAuctions(enriched.filter(Boolean) as AuctionWithProduct[]);
       } catch (err: any) {
         setError(err.message || "Unexpected error");
       } finally {
@@ -65,7 +93,7 @@ export default function HomePage() {
       }
     };
 
-    fetchProducts();
+    fetchAuctions();
   }, []);
 
   const handleStartBidding = () => {
@@ -102,28 +130,27 @@ export default function HomePage() {
         {loading && <p className="text-gray-500">Loading...</p>}
         {error && <p className="text-red-600">Error: {error}</p>}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {products
-            .filter((p) => p.status === "LISTED")
+          {auctions
+            .filter((a) => {
+              const now = new Date();
+              const start = new Date(a.startTime);
+              const end = new Date(a.endTime);
+              return start <= now && end > now;
+            })
             .slice(0, 8)
-            .map((product) => {
-              const imageUrl = product.image?.startsWith("http")
-                ? product.image
-                : `http://localhost:8080${
-                    product.image?.startsWith("/") ? "" : "/"
-                  }${product.image}`;
-              return (
-                <ProductCard
-                  key={product.id}
-                  id={product.id}
-                  title={product.title}
-                  description={product.description}
-                  image={imageUrl}
-                  startingPrice={Number(product.startingPrice) || 0}
-                  status={product.status}
-                  createdAt={product.createdAt}
-                />
-              );
-            })}
+            .map((auction) => (
+              <AuctionCard
+                key={auction.id}
+                id={auction.id}
+                title={auction.title}
+                description={auction.description}
+                image={auction.image || "/images/default.jpg"}
+                startingPrice={auction.startingPrice}
+                startTime={auction.startTime}
+                endTime={auction.endTime}
+                isClosed={auction.isClosed}
+              />
+            ))}
         </div>
       </section>
     </>

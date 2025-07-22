@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import ProductCard from "@/components/ProductCard";
-import { getApiUrl } from "../../../lib/api";
+import { getApiUrl } from "../../../../lib/api";
+import { authFetch } from "../../../../lib/authFetch";
 
 type Product = {
   id: string;
@@ -28,7 +29,7 @@ export default function AuctionsPage() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch(getApiUrl("/products"));
+        const res = await authFetch("/products");
         if (!res.ok) throw new Error("Failed to load products");
         const data: Product[] = await res.json();
 
@@ -36,9 +37,7 @@ export default function AuctionsPage() {
         const enrichedProducts = await Promise.all(
           data.map(async (product) => {
             try {
-              const imageRes = await fetch(
-                getApiUrl(`/product-images/${product.id}`)
-              );
+              const imageRes = await authFetch(`/product-images/${product.id}`);
               if (!imageRes.ok) throw new Error("Image not found");
               const imageData = await imageRes.json();
               const imageUrl = imageData[0]?.imageUrl || "/images/default.jpg";
