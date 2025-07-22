@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { getUserFromToken } from "../../utils/getUserFromToken";
+import Image from "next/image";
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -69,12 +70,14 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           {/* Logo */}
-          <Link
-            href="/"
-            className="flex items-center text-xl font-bold text-blue-600"
-          >
-            <span className="text-2xl text-orange-500">🔥</span>
-            <span className="ml-2">BidFlare</span>
+          <Link href="/" className="flex items-center">
+            <Image
+              src="/Logo.png"
+              alt="BidFlare Logo"
+              width={80}
+              height={30}
+              priority
+            />
           </Link>
 
           {/* Desktop Menu */}
