@@ -104,7 +104,7 @@ export default function AuctionsPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
-      <h1 className="text-4xl font-bold text-gray-800 mb-6 text-center">
+      <h1 className="text-4xl font-bold text-orange-600 mb-6 text-center">
         🔥 Live & Upcoming Auctions
       </h1>
       <p className="text-gray-500 text-center mb-10 max-w-xl mx-auto">
@@ -136,7 +136,7 @@ export default function AuctionsPage() {
           <button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
-            className="px-3 py-1 rounded-xl border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-50"
+            className="px-3 py-1 rounded-xl border border-gray-300 text-gray-600 hover:bg-orange-100 disabled:opacity-50"
           >
             Prev
           </button>
@@ -147,8 +147,8 @@ export default function AuctionsPage() {
               onClick={() => handlePageChange(page)}
               className={`px-3 py-1 rounded-xl border ${
                 page === currentPage
-                  ? "bg-blue-600 text-white border-blue-600"
-                  : "border-gray-300 text-gray-600 hover:bg-gray-100"
+                  ? "bg-orange-600 text-white border-orange-600"
+                  : "border-gray-300 text-gray-600 hover:bg-orange-100"
               }`}
             >
               {page}
@@ -158,7 +158,7 @@ export default function AuctionsPage() {
           <button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className="px-3 py-1 rounded-xl border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-50"
+            className="px-3 py-1 rounded-xl border border-gray-300 text-gray-600 hover:bg-orange-100 disabled:opacity-50"
           >
             Next
           </button>

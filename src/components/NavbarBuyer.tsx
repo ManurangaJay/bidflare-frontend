@@ -35,14 +35,14 @@ const NavbarBuyer = () => {
               <Link
                 key={link.name}
                 href={link.href}
-                className="text-gray-700 hover:text-blue-600 font-medium transition"
+                className="text-gray-700 hover:text-orange-600 font-medium transition"
               >
                 {link.name}
               </Link>
             ))}
             <button
               onClick={handleSignOut}
-              className="bg-red-600 text-white px-4 py-2 rounded-xl shadow hover:bg-red-700 transition"
+              className="bg-orange-600 text-white px-4 py-2 rounded-xl shadow hover:bg-orange-700 transition"
             >
               Sign Out
             </button>
@@ -67,7 +67,7 @@ const NavbarBuyer = () => {
             <Link
               key={link.name}
               href={link.href}
-              className="block text-gray-700 font-medium hover:text-blue-600 transition"
+              className="block text-gray-700 font-medium hover:text-orange-600 transition"
               onClick={() => setMobileMenuOpen(false)}
             >
               {link.name}
@@ -75,7 +75,7 @@ const NavbarBuyer = () => {
           ))}
           <button
             onClick={handleSignOut}
-            className="w-full bg-red-600 text-white py-2 rounded-xl mt-2 hover:bg-red-700 transition"
+            className="w-full bg-orange-600 text-white py-2 rounded-xl mt-2 hover:bg-orange-700 transition"
           >
             Sign Out
           </button>

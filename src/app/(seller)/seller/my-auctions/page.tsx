@@ -115,7 +115,7 @@ export default function MyAuctionsPage() {
   if (auctions.length === 0) {
     return (
       <RoleGuard allowedRoles={["SELLER"]}>
-        <div className="text-center text-gray-500 py-10">
+        <div className="text-center text-orange-700 py-10">
           <p>You haven’t created any auctions yet.</p>
         </div>{" "}
       </RoleGuard>
@@ -125,7 +125,7 @@ export default function MyAuctionsPage() {
   return (
     <RoleGuard allowedRoles={["SELLER"]}>
       <div className="px-4 md:px-8 py-6">
-        <h1 className="text-2xl md:text-3xl font-bold mb-6 text-gray-800">
+        <h1 className="text-2xl md:text-3xl font-bold mb-6 text-orange-600">
           My Auctions
         </h1>
 

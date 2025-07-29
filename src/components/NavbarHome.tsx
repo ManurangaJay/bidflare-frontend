@@ -23,13 +23,13 @@ const NavbarHome = () => {
           <div className="flex items-center space-x-6">
             <Link
               href="/register"
-              className="text-gray-700 hover:text-blue-600 font-medium transition"
+              className="text-gray-700 hover:text-orange-600 font-medium transition"
             >
               Register
             </Link>
             <Link
               href="/signin"
-              className="text-gray-700 hover:text-blue-600 font-medium transition"
+              className="text-gray-700 hover:text-orange-600 font-medium transition"
             >
               Sign In
             </Link>

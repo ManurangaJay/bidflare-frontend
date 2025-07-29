@@ -67,7 +67,7 @@ export default function SellerProductsPage() {
     return (
       <RoleGuard allowedRoles={["SELLER"]}>
         <div className="flex justify-center items-center py-10">
-          <Loader2 className="animate-spin h-6 w-6 text-blue-600" />
+          <Loader2 className="animate-spin h-6 w-6 text-orange-600" />
           <span className="ml-2 text-sm text-gray-500">
             Loading products...
           </span>
@@ -99,13 +99,15 @@ export default function SellerProductsPage() {
   return (
     <RoleGuard allowedRoles={["SELLER"]}>
       <div className="px-4 md:px-8 py-6">
-        <h1 className="text-2xl font-bold mb-6">Your Products</h1>
+        <h1 className="text-2xl font-bold text-orange-700 mb-6">
+          Your Products
+        </h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {products.map((product) => (
             <ProductCard key={product.id} {...product} />
           ))}
         </div>
-      </div>{" "}
+      </div>
     </RoleGuard>
   );
 }

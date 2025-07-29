@@ -36,7 +36,7 @@ const ProductCard = ({
   const createdDate = new Date(createdAt);
 
   return (
-    <div className="bg-white rounded-2xl shadow hover:shadow-lg transition overflow-hidden border border-gray-100">
+    <div className="bg-white rounded-2xl shadow hover:shadow-lg transition overflow-hidden border border-orange-100">
       <div className="relative">
         <img
           src={image || "/images/default.jpg"}
@@ -65,7 +65,7 @@ const ProductCard = ({
         <div className="text-sm text-gray-600 flex justify-between items-center">
           <span>
             Starting at:{" "}
-            <span className="font-medium text-blue-600">
+            <span className="font-medium text-orange-600">
               ${safeStartingPrice.toFixed(2)}
             </span>
           </span>
@@ -78,7 +78,7 @@ const ProductCard = ({
 
         <Link
           href={`/my-auction/${slugify(title)}`}
-          className="inline-block mt-2 text-blue-600 hover:underline text-sm font-medium"
+          className="inline-block mt-2 text-orange-600 hover:underline text-sm font-medium"
         >
           Manage Auction →
         </Link>

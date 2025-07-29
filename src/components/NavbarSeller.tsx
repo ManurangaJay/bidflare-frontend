@@ -35,7 +35,7 @@ const NavbarSeller = () => {
               <Link
                 key={link.name}
                 href={link.href}
-                className="text-gray-700 hover:text-blue-600 font-medium transition"
+                className="text-gray-700 hover:text-orange-600 font-medium transition"
               >
                 {link.name}
               </Link>
@@ -66,7 +66,7 @@ const NavbarSeller = () => {
             <Link
               key={link.name}
               href={link.href}
-              className="block text-gray-700 font-medium hover:text-blue-600 transition"
+              className="block text-gray-700 font-medium hover:text-orange-600 transition"
               onClick={() => setMobileMenuOpen(false)}
             >
               {link.name}

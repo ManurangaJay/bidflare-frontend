@@ -32,7 +32,7 @@ const AuctionCard = ({
   const end = new Date(endTime);
 
   let statusLabel = "Upcoming";
-  let statusClass = "bg-blue-100 text-blue-800";
+  let statusClass = "bg-orange-100 text-orange-800";
 
   if (isClosed) {
     statusLabel = "Closed";
@@ -49,7 +49,7 @@ const AuctionCard = ({
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow hover:shadow-lg transition overflow-hidden border border-gray-100">
+    <div className="bg-white rounded-2xl shadow hover:shadow-lg transition overflow-hidden border border-orange-100">
       <div className="relative">
         <img
           src={image || "/images/default.jpg"}
@@ -73,7 +73,7 @@ const AuctionCard = ({
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center text-sm text-gray-600">
           <span>
             Starting at:{" "}
-            <span className="font-medium text-blue-600">
+            <span className="font-medium text-orange-600">
               ${safeStartingPrice.toFixed(2)}
             </span>
           </span>
@@ -84,7 +84,7 @@ const AuctionCard = ({
           </span>
         </div>
 
-        <p className="text-sm text-red-400">
+        <p className="text-sm text-red-500">
           {isValidDate(end)
             ? `Ends: ${end.toLocaleString()}`
             : "End time unavailable"}
@@ -92,7 +92,7 @@ const AuctionCard = ({
 
         <Link
           href={`/auctions/${id}`}
-          className="inline-block mt-2 text-blue-600 hover:underline text-sm font-medium"
+          className="inline-block mt-2 text-orange-600 hover:text-orange-700 hover:underline text-sm font-medium"
         >
           View Auction →
         </Link>

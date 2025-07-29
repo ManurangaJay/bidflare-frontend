@@ -78,7 +78,7 @@ export default function RegisterPage() {
             <input
               type="text"
               name="name"
-              className="w-full border border-gray-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full border border-gray-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-orange-500 outline-none"
               value={form.name}
               onChange={handleChange}
               required
@@ -90,7 +90,7 @@ export default function RegisterPage() {
             <input
               type="email"
               name="email"
-              className="w-full border border-gray-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full border border-gray-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-orange-500 outline-none"
               value={form.email}
               onChange={handleChange}
               required
@@ -102,7 +102,7 @@ export default function RegisterPage() {
             <input
               type="password"
               name="password"
-              className="w-full border border-gray-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full border border-gray-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-orange-500 outline-none"
               value={form.password}
               onChange={handleChange}
               required
@@ -119,7 +119,7 @@ export default function RegisterPage() {
                 onClick={() => handleRoleChange("BUYER")}
                 className={`border rounded-xl p-4 text-center transition ${
                   form.role === "BUYER"
-                    ? "bg-blue-100 border-blue-500 text-blue-800"
+                    ? "bg-orange-100 border-orange-500 text-orange-800"
                     : "bg-white border-gray-300 text-gray-700 hover:bg-gray-50"
                 }`}
               >
@@ -132,7 +132,7 @@ export default function RegisterPage() {
                 onClick={() => handleRoleChange("SELLER")}
                 className={`border rounded-xl p-4 text-center transition ${
                   form.role === "SELLER"
-                    ? "bg-blue-100 border-blue-500 text-blue-800"
+                    ? "bg-orange-100 border-orange-500 text-orange-800"
                     : "bg-white border-gray-300 text-gray-700 hover:bg-gray-50"
                 }`}
               >
@@ -144,7 +144,7 @@ export default function RegisterPage() {
 
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded-xl hover:bg-blue-700 transition"
+            className="w-full bg-orange-600 text-white py-2 rounded-xl hover:bg-orange-700 transition"
           >
             Register
           </button>
@@ -152,7 +152,7 @@ export default function RegisterPage() {
 
         <p className="text-sm text-center text-gray-500 mt-4">
           Already have an account?{" "}
-          <a href="/signin" className="text-blue-600 hover:underline">
+          <a href="/signin" className="text-orange-600 hover:underline">
             Sign In
           </a>
         </p>

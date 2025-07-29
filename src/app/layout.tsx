@@ -13,7 +13,7 @@ export default function HomeLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <main className="pt-4">{children}</main>
+        <main>{children}</main>
       </body>
     </html>
   );

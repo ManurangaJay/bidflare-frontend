@@ -48,9 +48,9 @@ export default function SignInPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-orange-50 px-4">
       <div className="max-w-md w-full bg-white p-8 rounded-2xl shadow">
-        <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+        <h2 className="text-2xl font-bold text-orange-700 mb-6 text-center">
           Sign In to BidFlare
         </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -59,7 +59,7 @@ export default function SignInPage() {
             <label className="block text-sm text-gray-600 mb-1">Email</label>
             <input
               type="email"
-              className="w-full border border-gray-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full border border-gray-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-orange-500 outline-none"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -69,7 +69,7 @@ export default function SignInPage() {
             <label className="block text-sm text-gray-600 mb-1">Password</label>
             <input
               type="password"
-              className="w-full border border-gray-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full border border-gray-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-orange-500 outline-none"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -77,14 +77,14 @@ export default function SignInPage() {
           </div>
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded-xl hover:bg-blue-700 transition"
+            className="w-full bg-orange-500 text-white py-2 rounded-xl hover:bg-orange-600 transition"
           >
             Sign In
           </button>
         </form>
         <p className="text-sm text-center text-gray-500 mt-4">
           Don&apos;t have an account?{" "}
-          <a href="/register" className="text-blue-600 hover:underline">
+          <a href="/register" className="text-orange-600 hover:underline">
             Register
           </a>
         </p>
