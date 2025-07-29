@@ -94,7 +94,7 @@ const CreateListing = () => {
 
       if (!auctionRes.ok) throw new Error("Auction creation failed");
 
-      router.push("/my-products");
+      router.push("/seller/my-products");
     } catch (err: any) {
       setError(err.message || "Unexpected error");
     } finally {
