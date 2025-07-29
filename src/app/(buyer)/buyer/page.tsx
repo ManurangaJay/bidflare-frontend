@@ -119,6 +119,7 @@ export default function BuyerHomepage() {
                 key={auction.id}
                 {...auction}
                 image={auction.image || "/images/default.jpg"}
+                onClick={() => router.push(`/buyer/auctions/${auction.id}`)}
               />
             ))}
         </div>

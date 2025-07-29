@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { formatDistanceToNowStrict, isAfter, isBefore } from "date-fns";
 
 type AuctionCardProps = {
@@ -10,6 +9,7 @@ type AuctionCardProps = {
   startTime: string;
   endTime: string;
   isClosed: boolean;
+  onClick?: () => void; // 👈 NEW
 };
 
 const isValidDate = (date: Date) => !isNaN(date.getTime());
@@ -23,6 +23,7 @@ const AuctionCard = ({
   startTime,
   endTime,
   isClosed,
+  onClick, // 👈 NEW
 }: AuctionCardProps) => {
   const safeStartingPrice =
     typeof startingPrice === "number" ? startingPrice : 0;
@@ -49,7 +50,10 @@ const AuctionCard = ({
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow hover:shadow-lg transition overflow-hidden border border-orange-100">
+    <div
+      onClick={onClick}
+      className="bg-white rounded-2xl shadow hover:shadow-lg transition overflow-hidden border border-orange-100 cursor-pointer"
+    >
       <div className="relative">
         <img
           src={image || "/images/default.jpg"}
@@ -89,13 +93,6 @@ const AuctionCard = ({
             ? `Ends: ${end.toLocaleString()}`
             : "End time unavailable"}
         </p>
-
-        <Link
-          href={`/auctions/${id}`}
-          className="inline-block mt-2 text-orange-600 hover:text-orange-700 hover:underline text-sm font-medium"
-        >
-          View Auction →
-        </Link>
       </div>
     </div>
   );

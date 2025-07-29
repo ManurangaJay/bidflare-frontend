@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { authFetch } from "../../../../../lib/authFetch";
 import AuctionCard from "@/components/AuctionCard";
+import { useRouter } from "next/navigation";
 
 type Auction = {
   id: string;
@@ -28,6 +29,7 @@ export default function AuctionsPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const router = useRouter();
 
   useEffect(() => {
     const fetchAuctions = async () => {
@@ -127,6 +129,7 @@ export default function AuctionsPage() {
             startTime={auction.startTime}
             endTime={auction.endTime}
             isClosed={auction.isClosed}
+            onClick={() => router.push(`/buyer/auctions/${auction.id}`)}
           />
         ))}
       </div>
