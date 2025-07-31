@@ -29,6 +29,13 @@ type ProductResponseDto = {
   createdAt: string;
   updatedAt: string;
 };
+type BidDto = {
+  id: string;
+  auctionId: string;
+  bidderId: string;
+  amount: number;
+  createdAt: string;
+};
 
 export default function AuctionDetailPage() {
   const params = useParams();
@@ -37,7 +44,6 @@ export default function AuctionDetailPage() {
   const [auction, setAuction] = useState<AuctionResponseDto | null>(null);
   const [product, setProduct] = useState<ProductResponseDto | null>(null);
   const [imageUrl, setImageUrl] = useState<string>("/images/default.jpg");
-  const [timeRemaining, setTimeRemaining] = useState<string>("--:--:--");
   const [days, setDays] = useState(0);
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
@@ -45,6 +51,23 @@ export default function AuctionDetailPage() {
   const [isBidModalOpen, setBidModalOpen] = useState(false);
   const user = getUserFromToken();
   const bidderId = user?.userId ?? "";
+  const [bids, setBids] = useState<BidDto[]>([]);
+
+  const fetchBids = async () => {
+    try {
+      const res = await authFetch(`/bids/auction/${auction?.id}`);
+      const bidData: BidDto[] = await res.json();
+      setBids(bidData);
+    } catch (error) {
+      console.error("Error fetching bids:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (auction?.id) {
+      fetchBids();
+    }
+  }, [auction?.id]);
 
   useEffect(() => {
     if (!id) return;
@@ -229,7 +252,7 @@ export default function AuctionDetailPage() {
             </p>
           )}
         </div>
-        {auction && <BidsList auctionId={auction.id} />}{" "}
+        {auction && <BidsList bids={bids} />}
       </div>
       <PlaceBidModal
         isOpen={isBidModalOpen}
@@ -239,6 +262,7 @@ export default function AuctionDetailPage() {
         startingPrice={product.startingPrice}
         onSuccess={() => {
           toast.success("Your bid has been placed successfully!");
+          fetchBids();
         }}
       />
     </div>

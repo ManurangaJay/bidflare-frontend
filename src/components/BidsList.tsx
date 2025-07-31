@@ -1,6 +1,4 @@
 "use client";
-import { useEffect, useState } from "react";
-import { authFetch } from "../../lib/authFetch";
 import { format } from "date-fns";
 
 type BidDto = {
@@ -11,37 +9,8 @@ type BidDto = {
   createdAt: string;
 };
 
-export default function BidsList({ auctionId }: { auctionId: string }) {
-  const [bids, setBids] = useState<BidDto[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (!auctionId) return;
-
-    const fetchBids = async () => {
-      try {
-        const res = await authFetch(`/bids/auction/${auctionId}`);
-        const bidData: BidDto[] = await res.json();
-        setBids(bidData);
-      } catch (error) {
-        console.error("Error fetching bids:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchBids();
-  }, [auctionId]);
-
-  if (loading) {
-    return (
-      <div className="mt-8 p-4 border border-gray-200 rounded-lg bg-gray-50">
-        <p className="text-sm text-gray-500">Loading bids...</p>
-      </div>
-    );
-  }
-
-  if (bids.length === 0) {
+export default function BidsList({ bids }: { bids: BidDto[] }) {
+  if (!bids || bids.length === 0) {
     return (
       <div className="mt-8 p-4 border border-gray-200 rounded-lg bg-gray-50">
         <p className="text-sm text-gray-500">No bids yet.</p>
@@ -49,7 +18,6 @@ export default function BidsList({ auctionId }: { auctionId: string }) {
     );
   }
 
-  // Sort and calculate bar widths
   const sortedBids = [...bids].sort((a, b) => b.amount - a.amount);
   const maxAmount = sortedBids[0].amount;
 
