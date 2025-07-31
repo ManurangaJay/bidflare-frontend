@@ -2,6 +2,7 @@ import NavbarHome from "@/components/NavbarHome";
 import Footer from "@/components/FooterHome";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -13,7 +14,7 @@ export default function HomeLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <main>{children}</main>
+        <main>{children}</main> <Toaster richColors position="bottom-right" />
       </body>
     </html>
   );

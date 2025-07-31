@@ -4,6 +4,10 @@ import { useParams } from "next/navigation";
 import { formatDistanceToNowStrict } from "date-fns";
 import { ClockIcon, TagIcon } from "lucide-react";
 import { authFetch } from "../../../../../../lib/authFetch";
+import BidsList from "@/components/BidsList";
+import PlaceBidModal from "@/components/PlaceBidModal";
+import { getUserFromToken } from "../../../../../../utils/getUserFromToken";
+import { toast } from "sonner";
 
 type AuctionResponseDto = {
   id: string;
@@ -38,6 +42,9 @@ export default function AuctionDetailPage() {
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
+  const [isBidModalOpen, setBidModalOpen] = useState(false);
+  const user = getUserFromToken();
+  const bidderId = user?.userId ?? "";
 
   useEffect(() => {
     if (!id) return;
@@ -120,7 +127,6 @@ export default function AuctionDetailPage() {
       <div className="space-y-6">
         {/* Title */}
         <h1 className="text-3xl font-bold text-orange-600">{product.title}</h1>
-
         {/* Product Image + Info */}
         <div className="grid md:grid-cols-2 gap-6 items-start">
           {/* Image */}
@@ -187,19 +193,21 @@ export default function AuctionDetailPage() {
             )}
           </div>
         </div>
-
         {/* Action Buttons */}
         {!auction.isClosed && (
           <div className="flex flex-col sm:flex-row gap-4 mt-6">
-            <button className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-lg shadow">
+            <button
+              className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-lg shadow"
+              onClick={() => setBidModalOpen(true)}
+            >
               Place a Bid
             </button>
+
             <button className="border border-orange-500 text-orange-600 px-6 py-2 rounded-lg hover:bg-orange-50">
               Ask a Question
             </button>
           </div>
         )}
-
         {/* Auction Status Panel */}
         <div className="mt-6 p-4 rounded-lg bg-orange-50 border border-orange-200">
           <p className="text-sm text-gray-600">
@@ -221,7 +229,17 @@ export default function AuctionDetailPage() {
             </p>
           )}
         </div>
+        {auction && <BidsList auctionId={auction.id} />}{" "}
       </div>
+      <PlaceBidModal
+        isOpen={isBidModalOpen}
+        onClose={() => setBidModalOpen(false)}
+        auctionId={auction.id}
+        bidderId={bidderId}
+        onSuccess={() => {
+          toast.success("Your bid has been placed successfully!");
+        }}
+      />
     </div>
   );
 }
