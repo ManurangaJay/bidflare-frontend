@@ -236,6 +236,7 @@ export default function AuctionDetailPage() {
         onClose={() => setBidModalOpen(false)}
         auctionId={auction.id}
         bidderId={bidderId}
+        startingPrice={product.startingPrice}
         onSuccess={() => {
           toast.success("Your bid has been placed successfully!");
         }}

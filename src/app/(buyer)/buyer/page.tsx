@@ -80,7 +80,7 @@ export default function BuyerHomepage() {
   }, []);
 
   const handleStartBidding = () => {
-    router.push("/auctions");
+    router.push("/buyer/auctions");
   };
 
   return (

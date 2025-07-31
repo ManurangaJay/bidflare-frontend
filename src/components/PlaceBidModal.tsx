@@ -4,29 +4,40 @@ import { Dialog } from "@headlessui/react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { authFetch } from "../../lib/authFetch";
+import { toast } from "sonner"; // ✅ Import toast
 
 export default function PlaceBidModal({
   isOpen,
   onClose,
   auctionId,
   bidderId,
+  startingPrice,
   onSuccess,
 }: {
   isOpen: boolean;
   onClose: () => void;
   auctionId: string;
   bidderId: string;
+  startingPrice: number;
   onSuccess?: () => void;
 }) {
   const [amount, setAmount] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
   const handleSubmit = async () => {
-    setError("");
     const bidAmount = parseFloat(amount);
+
     if (!bidAmount || bidAmount <= 0) {
-      setError("Please enter a valid amount");
+      toast.error("Please enter a valid amount");
+      return;
+    }
+
+    if (bidAmount <= startingPrice) {
+      toast.error(
+        `Bid must be higher than the starting price of $${startingPrice.toFixed(
+          2
+        )}`
+      );
       return;
     }
 
@@ -50,7 +61,7 @@ export default function PlaceBidModal({
       onClose();
       onSuccess?.();
     } catch (err: any) {
-      setError("Failed to place bid: " + err.message);
+      toast.error("Failed to place bid: " + err.message); // ✅ Show error as toast
     } finally {
       setLoading(false);
     }
@@ -60,10 +71,7 @@ export default function PlaceBidModal({
     <AnimatePresence>
       {isOpen && (
         <Dialog open={isOpen} onClose={onClose} className="relative z-50">
-          {/* Overlay */}
           <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
-
-          {/* Centered Panel */}
           <div className="fixed inset-0 flex items-center justify-center p-4">
             <Dialog.Panel className="w-full max-w-md">
               <motion.div
@@ -91,10 +99,6 @@ export default function PlaceBidModal({
                       placeholder="Enter your bid amount"
                     />
                   </label>
-
-                  {error && (
-                    <p className="text-sm text-red-500 font-medium">{error}</p>
-                  )}
 
                   <div className="flex justify-end gap-2 mt-6">
                     <button
