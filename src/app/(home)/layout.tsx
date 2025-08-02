@@ -12,7 +12,7 @@ export default function HomeLayout({
   return (
     <>
       <NavbarHome />
-      <main className="pt-4">{children}</main>
+      <main>{children}</main>
       <FooterHome />
     </>
   );
