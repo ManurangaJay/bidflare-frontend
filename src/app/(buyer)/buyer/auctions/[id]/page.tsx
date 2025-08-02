@@ -252,7 +252,7 @@ export default function AuctionDetailPage() {
             </p>
           )}
         </div>
-        {auction && <BidsList bids={bids} />}
+        {auction && <BidsList bids={bids} currentUserId={bidderId} />}
       </div>
       <PlaceBidModal
         isOpen={isBidModalOpen}
