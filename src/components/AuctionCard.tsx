@@ -1,4 +1,9 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { formatDistanceToNowStrict, isAfter, isBefore } from "date-fns";
+import { Heart, HeartOff } from "lucide-react";
+import { authFetch } from "../../lib/authFetch";
 
 type AuctionCardProps = {
   id: string;
@@ -9,7 +14,7 @@ type AuctionCardProps = {
   startTime: string;
   endTime: string;
   isClosed: boolean;
-  onClick?: () => void; // 👈 NEW
+  onClick?: () => void;
 };
 
 const isValidDate = (date: Date) => !isNaN(date.getTime());
@@ -23,10 +28,13 @@ const AuctionCard = ({
   startTime,
   endTime,
   isClosed,
-  onClick, // 👈 NEW
+  onClick,
 }: AuctionCardProps) => {
   const safeStartingPrice =
     typeof startingPrice === "number" ? startingPrice : 0;
+
+  const [isWishlisted, setIsWishlisted] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const now = new Date();
   const start = new Date(startTime);
@@ -49,10 +57,66 @@ const AuctionCard = ({
     statusClass = "bg-gray-300 text-gray-700";
   }
 
+  useEffect(() => {
+    const fetchWishlistState = async () => {
+      try {
+        const res = await authFetch(`/wishlist/contains/${id}`, {
+          method: "GET",
+          headers: {
+            "Cache-Control": "no-cache",
+          },
+        });
+
+        if (res.status === 304) {
+          setIsWishlisted(false);
+          return;
+        }
+
+        if (!res.ok) {
+          throw new Error(`Error fetching wishlist: ${res.status}`);
+        }
+
+        const data = await res.json();
+        setIsWishlisted(Boolean(data));
+      } catch (error) {
+        console.error("Failed to load wishlist status:", error);
+      }
+    };
+
+    fetchWishlistState();
+  }, [id]);
+
+  const toggleWishlist = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    setLoading(true);
+    try {
+      if (isWishlisted) {
+        await authFetch(`/wishlist/${id}`, {
+          method: "DELETE",
+        });
+        setIsWishlisted(false);
+      } else {
+        await authFetch(`/wishlist`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ productId: id }),
+        });
+        setIsWishlisted(true);
+      }
+    } catch (error) {
+      console.error("Wishlist toggle error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div
       onClick={onClick}
-      className="bg-white rounded-2xl shadow hover:shadow-lg transition overflow-hidden border border-orange-100 cursor-pointer"
+      className="bg-white rounded-2xl shadow hover:shadow-lg transition overflow-hidden border border-orange-100 cursor-pointer relative"
     >
       <div className="relative">
         <img
@@ -60,6 +124,25 @@ const AuctionCard = ({
           alt={title}
           className="w-full h-48 object-contain rounded-t-2xl bg-white"
         />
+
+        {/* ❤️ Wishlist Button */}
+        <button
+          onClick={toggleWishlist}
+          disabled={loading}
+          className={`absolute top-2 right-2 z-10 bg-white/90 rounded-full p-1.5 shadow transition ${
+            isWishlisted ? "hover:scale-105" : "hover:bg-white"
+          }`}
+          title={isWishlisted ? "Remove from Wishlist" : "Add to Wishlist"}
+        >
+          <Heart
+            className={`h-5 w-5 ${
+              isWishlisted
+                ? "text-red-500 fill-red-500"
+                : "text-gray-400 hover:text-red-500"
+            }`}
+          />
+        </button>
+
         <span
           className={`absolute bottom-2 right-2 text-xs font-semibold px-3 py-1 rounded-full ${statusClass}`}
         >
