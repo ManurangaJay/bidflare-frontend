@@ -92,7 +92,7 @@ export default function WatchlistPage() {
                 startTime: auction.startTime,
                 endTime: auction.endTime,
                 isClosed: auction.isClosed,
-                onClick: () => router.push(`/buyer/auctions/${auction.id}`),
+                onClick: () => router.push(`/buyer/auctions/${product.id}`),
               } satisfies AuctionCardProps;
             } catch {
               return null;
