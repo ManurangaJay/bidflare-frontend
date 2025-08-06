@@ -110,7 +110,7 @@ const CreateListing = () => {
         </h1>
         <form
           onSubmit={handleSubmit}
-          className="grid grid-cols-1 lg:grid-cols-2 gap-8 bg-white p-8 rounded-xl shadow-xl"
+          className="grid grid-cols-1 lg:grid-cols-2 gap-8 bg-white p-8 rounded-xl"
         >
           {/* Left column - Product Details */}
           <div className="space-y-6">
@@ -121,7 +121,7 @@ const CreateListing = () => {
               <label className="block font-medium text-sm mb-1">Title</label>
               <input
                 type="text"
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-300"
+                className="w-full border border-gray-200 rounded-sm px-4 py-2 focus:outline-none focus:border-orange-100 focus:ring-2 focus:ring-orange-100"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 required
@@ -133,7 +133,7 @@ const CreateListing = () => {
                 Description
               </label>
               <textarea
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-300"
+                className="w-full border border-gray-200 rounded-sm px-4 py-2 focus:outline-none focus:border-orange-100 focus:ring-2 focus:ring-orange-100"
                 rows={4}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
@@ -147,7 +147,7 @@ const CreateListing = () => {
                 value={categoryId}
                 onChange={(e) => setCategoryId(e.target.value)}
                 required
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-300"
+                className="w-full border border-gray-200 rounded-sm px-4 py-2 focus:outline-none focus:border-orange-100 focus:ring-2 focus:ring-orange-100"
               >
                 <option value="">Select category</option>
                 {categories.map((cat) => (
@@ -162,7 +162,7 @@ const CreateListing = () => {
               <label className="block font-medium text-sm mb-1">Tags</label>
               <input
                 type="text"
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-300"
+                className="w-full border border-gray-200 rounded-sm px-4 py-2 focus:outline-none focus:border-orange-100 focus:ring-2 focus:ring-orange-100"
                 placeholder="e.g., electronics, gadgets"
                 value={tags}
                 onChange={(e) => setTags(e.target.value)}
@@ -175,7 +175,7 @@ const CreateListing = () => {
               </label>
               <input
                 type="number"
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-300"
+                className="w-full border border-gray-200 rounded-sm px-4 py-2 focus:outline-none focus:border-orange-100 focus:ring-2 focus:ring-orange-100"
                 value={startingPrice}
                 onChange={(e) => setStartingPrice(e.target.value)}
                 required
@@ -198,7 +198,7 @@ const CreateListing = () => {
                   </label>
                   <input
                     type="datetime-local"
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-300"
+                    className="w-full border border-gray-200 rounded-sm px-4 py-2 focus:outline-none focus:border-orange-100 focus:ring-2 focus:ring-orange-100"
                     value={startTime}
                     onChange={(e) => setStartTime(e.target.value)}
                     required
@@ -210,7 +210,7 @@ const CreateListing = () => {
                   </label>
                   <input
                     type="datetime-local"
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-300"
+                    className="w-full border border-gray-200 rounded-sm px-4 py-2 focus:outline-none focus:border-orange-100 focus:ring-2 focus:ring-orange-100"
                     value={endTime}
                     onChange={(e) => setEndTime(e.target.value)}
                     required
@@ -227,7 +227,7 @@ const CreateListing = () => {
                 type="file"
                 multiple
                 accept="image/*,video/*"
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-300"
+                className="w-full border border-gray-200 rounded-sm px-4 py-2 focus:outline-none focus:border-orange-100 focus:ring-2 focus:ring-orange-100"
                 onChange={handleFileChange}
               />
             </div>
