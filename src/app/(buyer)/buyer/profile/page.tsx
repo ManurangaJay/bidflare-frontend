@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { toast } from "sonner";
 import {
   Pencil,
@@ -8,11 +8,12 @@ import {
   XCircle,
   Loader2,
   KeyRound,
-  Eye, // <-- New Icon
-  EyeOff, // <-- New Icon
+  Eye,
+  EyeOff,
 } from "lucide-react";
 import { getUserFromToken } from "../../../../../utils/getUserFromToken";
 import { authFetch } from "../../../../../lib/authFetch";
+import { AddressSection } from "@/components/AddressSection";
 
 interface UserProfile {
   id: string;
@@ -23,7 +24,6 @@ interface UserProfile {
   profileImage: string | null;
 }
 
-// The form data can include a password, which is not part of the UserProfile we receive.
 type ProfileFormData = Partial<
   Omit<UserProfile, "id" | "role" | "isVerified">
 > & {
@@ -39,17 +39,14 @@ export default function ProfilePage() {
   const [editingField, setEditingField] = useState<EditableField | null>(null);
   const [formData, setFormData] = useState<ProfileFormData>({});
 
-  // --- State for password reset ---
   const [isResettingPassword, setIsResettingPassword] = useState(false);
   const [isPasswordSubmitting, setIsPasswordSubmitting] = useState(false);
   const [passwordData, setPasswordData] = useState({
     newPassword: "",
     confirmPassword: "",
   });
-  // --- Start: New state for show/hide password ---
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  // --- End: New state for show/hide password ---
 
   const fetchUserProfile = useCallback(async () => {
     const decodedUser = getUserFromToken();
@@ -134,7 +131,6 @@ export default function ProfilePage() {
     );
   };
 
-  // --- Handlers for password reset ---
   const handlePasswordDataChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setPasswordData((prev) => ({ ...prev, [name]: value }));
@@ -187,7 +183,7 @@ export default function ProfilePage() {
   ): React.JSX.Element => {
     const isEditing = editingField === field;
     return (
-      <div className="p-4 border-b border-gray-200">
+      <div className="p-4 sm:p-6">
         <div className="flex justify-between items-center">
           <div>
             <label className="text-sm font-medium text-gray-500">{label}</label>
@@ -244,7 +240,7 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
+      <div className="flex justify-center items-center min-h-screen bg-gray-50">
         <Loader2 className="animate-spin text-orange-600" size={48} />
       </div>
     );
@@ -268,29 +264,35 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-screen p-4 sm:p-6 lg:p-8">
-      <div className="max-w-3xl mx-auto">
-        <h1 className="text-3xl font-bold text-orange-600 mb-6">My Profile</h1>
-        <div className="bg-white rounded-2xl overflow-hidden">
-          <h2 className="text-2xl font-bold text-orange-900 mb-4">
-            My details
-          </h2>
-          <hr className="border-orange-300" />
+      <div className="max-w-3xl mx-auto space-y-8">
+        <h1 className="text-3xl font-bold text-gray-900">My Profile</h1>
+
+        {/* Personal Details Section */}
+        <div className="bg-white rounded-2xl overflow-hidden shadow-sm">
+          <div className="p-6">
+            <h2 className="text-2xl font-bold text-orange-900">My Details</h2>
+            <hr className="border-orange-200 mt-4" />
+          </div>
           <div className="divide-y divide-gray-200">
             {renderField("Full Name", "name")}
             {renderField("Email", "email", "email")}
-            <div className="p-4">
+            <div className="p-4 sm:p-6">
               <label className="text-sm font-medium text-gray-500">Role</label>
-              <p className="text-lg text-gray-900 capitalize">{user.role}</p>
+              <p className="text-lg text-gray-900 capitalize">
+                {user.role.toLowerCase()}
+              </p>
             </div>
           </div>
         </div>
 
+        <AddressSection />
+
         {/* Password Reset Section */}
-        <div className="mt-8">
-          <h2 className="text-2xl font-bold text-orange-900 mb-4">Security</h2>
-          <hr className="border-orange-300" />
-          <div className="bg-white rounded-2xl overflow-hidden">
-            <div className="p-4">
+        <div className="bg-white rounded-2xl overflow-hidden shadow-sm">
+          <div className="p-6">
+            <h2 className="text-2xl font-bold text-orange-900">Security</h2>
+            <hr className="border-orange-200 mt-4" />
+            <div className="mt-6">
               {!isResettingPassword ? (
                 <div className="flex justify-between items-center">
                   <div>
@@ -314,7 +316,6 @@ export default function ProfilePage() {
                     Change Your Password
                   </h3>
                   <div className="space-y-4">
-                    {/* --- Start: New Password Input with Show/Hide --- */}
                     <div>
                       <label
                         htmlFor="newPassword"
@@ -350,9 +351,6 @@ export default function ProfilePage() {
                         </button>
                       </div>
                     </div>
-                    {/* --- End: New Password Input with Show/Hide --- */}
-
-                    {/* --- Start: Confirm Password Input with Show/Hide --- */}
                     <div>
                       <label
                         htmlFor="confirmPassword"
@@ -392,7 +390,6 @@ export default function ProfilePage() {
                         </button>
                       </div>
                     </div>
-                    {/* --- End: Confirm Password Input with Show/Hide --- */}
                   </div>
                   <div className="mt-6 flex justify-end gap-3">
                     <button
@@ -423,7 +420,6 @@ export default function ProfilePage() {
             </div>
           </div>
         </div>
-        {/* --- End: Password Reset Section --- */}
       </div>
     </div>
   );
