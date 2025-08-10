@@ -51,22 +51,25 @@ export default function AuctionsPage() {
                 if (!productRes.ok) throw new Error();
                 const product: Product = await productRes.json();
 
-                let image = "/images/default.jpg";
+                let image =
+                  "https://placehold.co/600x400/EEE/31343C?text=No+Image";
                 try {
                   const imageRes = await authFetch(
                     `/product-images/${product.id}`
                   );
                   if (imageRes.ok) {
                     const imageData = await imageRes.json();
-                    image = imageData[0]?.imageUrl || image;
-                    if (!image.startsWith("http")) {
-                      image = `http://localhost:8080${
-                        image.startsWith("/") ? "" : "/"
-                      }${image}`;
+                    const imageUrl = imageData[0]?.imageUrl;
+                    if (imageUrl) {
+                      image = imageUrl.startsWith("http")
+                        ? imageUrl
+                        : `http://localhost:8080${
+                            imageUrl.startsWith("/") ? "" : "/"
+                          }${imageUrl}`;
                     }
                   }
                 } catch {
-                  return { ...product, image: "/images/default.jpg" };
+                  // Silently ignore image fetch errors and use the placeholder.
                 }
 
                 return {
