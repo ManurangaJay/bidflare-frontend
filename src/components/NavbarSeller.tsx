@@ -13,7 +13,6 @@ const NavbarSeller = () => {
     { name: "My Products", href: "/seller/my-products" },
     { name: "Create Listing", href: "/seller/create-listing" },
     { name: "My Auctions", href: "/seller/my-auctions" },
-    { name: "Analytics", href: "/seller/analytics" },
     { name: "Profile", href: "/seller/profile" },
   ];
 
@@ -61,7 +60,7 @@ const NavbarSeller = () => {
       </div>
 
       {mobileMenuOpen && (
-        <div className="md:hidden bg-white border-t px-4 pb-4 space-y-2 shadow-sm">
+        <div className="md:hidden bg-white border-t border-gray-200 px-4 pb-4 space-y-2 shadow-sm">
           {sellerLinks.map((link) => (
             <Link
               key={link.name}

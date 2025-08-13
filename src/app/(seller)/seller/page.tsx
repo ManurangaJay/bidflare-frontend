@@ -46,7 +46,7 @@ export default function SellerHomepage() {
         </div>
 
         <button
-          onClick={() => router.push("/create-listing")}
+          onClick={() => router.push("/seller/create-listing")}
           className="bg-orange-500 text-white px-6 py-3 rounded-xl shadow hover:bg-orange-600 transition"
         >
           List a New Product

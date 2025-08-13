@@ -5,6 +5,7 @@ import AuctionCard from "@/components/AuctionCard";
 import { Loader2 } from "lucide-react";
 import { authFetch } from "../../../../../lib/authFetch";
 import RoleGuard from "@/components/RoleGuard";
+import { useRouter } from "next/navigation";
 
 type Product = {
   id: string;
@@ -33,6 +34,7 @@ export default function MyAuctionsPage() {
   const [auctions, setAuctions] = useState<AuctionWithProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchMyAuctions = async () => {
@@ -116,7 +118,13 @@ export default function MyAuctionsPage() {
     return (
       <RoleGuard allowedRoles={["SELLER"]}>
         <div className="text-center text-orange-700 py-10">
-          <p>You haven’t created any auctions yet.</p>
+          <p className="pt-20 pb-20">You haven’t created any auctions yet.</p>
+          <button
+            onClick={() => router.push("/seller/create-listing")}
+            className="bg-orange-500 text-white px-6 py-3 mb-80 rounded-xl shadow hover:bg-orange-600 transition"
+          >
+            List a New Product
+          </button>
         </div>{" "}
       </RoleGuard>
     );

@@ -62,7 +62,7 @@ const NavbarBuyer = () => {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-white border-t px-4 pb-4 space-y-2 shadow-sm">
+        <div className="md:hidden bg-white border-t border-gray-200 px-4 pb-4 space-y-2 shadow-sm">
           {buyerLinks.map((link) => (
             <Link
               key={link.name}

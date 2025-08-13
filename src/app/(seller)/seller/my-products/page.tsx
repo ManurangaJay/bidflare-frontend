@@ -5,6 +5,7 @@ import ProductCard from "@/components/ProductCard";
 import { Loader2 } from "lucide-react";
 import { authFetch } from "../../../../../lib/authFetch";
 import RoleGuard from "@/components/RoleGuard";
+import { useRouter } from "next/navigation";
 
 type Product = {
   id: string;
@@ -21,6 +22,7 @@ export default function SellerProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchSellerProducts = async () => {
@@ -89,8 +91,14 @@ export default function SellerProductsPage() {
   if (products.length === 0) {
     return (
       <RoleGuard allowedRoles={["SELLER"]}>
-        <div className="text-center text-gray-500 py-10">
-          <p>No products found. Start listing some!</p>
+        <div className="text-center text-gray-500 pt-20 text-lg">
+          <p className="pb-20">No products found. Start listing some!</p>
+          <button
+            onClick={() => router.push("/seller/create-listing")}
+            className="bg-orange-500 text-white px-6 py-3 mb-80 rounded-xl shadow hover:bg-orange-600 transition"
+          >
+            List a New Product
+          </button>
         </div>
       </RoleGuard>
     );
