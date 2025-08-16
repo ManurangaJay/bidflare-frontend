@@ -12,6 +12,7 @@ const NavbarBuyer = () => {
     { name: "Home", href: "/buyer" },
     { name: "Auctions", href: "/buyer/auctions" },
     { name: "My Bids", href: "/buyer/my-bids" },
+    { name: "My Wins", href: "/buyer/my-wins" },
     { name: "Watchlist", href: "/buyer/watchlist" },
     { name: "Profile", href: "/buyer/profile" },
   ];
