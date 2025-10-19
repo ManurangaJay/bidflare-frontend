@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import ThemeToggle from "./ThemeToggle";
 
 const NavbarHome = () => {
   return (
-    <nav className="bg-white shadow-md sticky top-0 z-50">
+    <nav className="bg-background shadow-md dark:shadow-2xl sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           {/* Logo */}
@@ -19,17 +20,18 @@ const NavbarHome = () => {
             />
           </Link>
 
-          {/* Auth Links */}
-          <div className="flex items-center space-x-6">
+          {/* Auth Links and Theme Toggle */}
+          <div className="flex items-center space-x-4">
+            <ThemeToggle />
             <Link
               href="/register"
-              className="text-gray-700 hover:text-orange-600 font-medium transition"
+              className="text-foreground hover:text-orange-primary font-medium transition-colors hover:text-orange-500"
             >
               Register
             </Link>
             <Link
               href="/signin"
-              className="text-gray-700 hover:text-orange-600 font-medium transition"
+              className="text-foreground hover:text-orange-primary font-medium transition-colors hover:text-orange-500"
             >
               Sign In
             </Link>
