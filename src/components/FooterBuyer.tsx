@@ -14,29 +14,31 @@ const FooterBuyer = () => {
   ];
 
   return (
-    <footer className="bg-orange-50 text-gray-700 py-10 mt-10 border-t border-orange-200">
+    <footer className="bg-orange-secondary/30 dark:bg-orange-primary/10 text-foreground py-10 mt-10 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1),0_-2px_4px_-1px_rgba(0,0,0,0.06)] dark:shadow-[0_-8px_25px_-5px_rgba(0,0,0,0.3),0_-4px_10px_-6px_rgba(0,0,0,0.2)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-8">
         <div>
           <Link
             href="/"
-            className="flex items-center text-xl font-bold text-orange-600 mb-2"
+            className="flex items-center text-xl font-bold text-orange-primary mb-2"
           >
             <span className="text-2xl text-orange-500">🔥</span>
             <span className="ml-2">BidFlare</span>
           </Link>
-          <p className="text-sm mt-2 text-gray-600">
+          <p className="text-sm mt-2 text-muted-foreground">
             Empowering fair and fast auctions online. Discover incredible deals
             every day.
           </p>
         </div>
         <div>
-          <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
+          <h4 className="text-lg font-semibold mb-4 text-orange-primary">
+            Quick Links
+          </h4>
           <ul className="space-y-2 text-sm">
             {quickLinks.map((link) => (
               <li key={link.name}>
                 <Link
                   href={link.href}
-                  className="hover:text-orange-600 transition"
+                  className="text-foreground transition-colors hover:text-orange-500"
                 >
                   {link.name}
                 </Link>
@@ -45,13 +47,15 @@ const FooterBuyer = () => {
           </ul>
         </div>
         <div>
-          <h4 className="text-lg font-semibold mb-4">Follow Us</h4>
+          <h4 className="text-lg font-semibold mb-4 text-orange-primary">
+            Follow Us
+          </h4>
           <div className="flex space-x-4">
             <a
               href="https://facebook.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-orange-600 transition"
+              className="hover:text-orange-500 transition-colors"
             >
               <Facebook size={20} />
             </a>
@@ -59,7 +63,7 @@ const FooterBuyer = () => {
               href="https://twitter.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-orange-500 transition"
+              className="hover:text-orange-500 transition-colors"
             >
               <Twitter size={20} />
             </a>
@@ -82,7 +86,7 @@ const FooterBuyer = () => {
           </div>
         </div>
       </div>
-      <div className="mt-10 text-center text-sm text-gray-500">
+      <div className="mt-10 text-center text-sm text-muted-foreground">
         &copy; {new Date().getFullYear()} BidFlare. All rights reserved.
       </div>
     </footer>

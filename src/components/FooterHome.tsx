@@ -37,7 +37,7 @@ const FooterHome = () => {
               <li key={link.name}>
                 <Link
                   href={link.href}
-                  className=" transition-colors hover:text-orange-500"
+                  className="text-foreground transition-colors hover:text-orange-500"
                 >
                   {link.name}
                 </Link>

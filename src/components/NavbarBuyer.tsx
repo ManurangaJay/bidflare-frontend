@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import Image from "next/image";
+import ThemeToggle from "./ThemeToggle";
 
 const NavbarBuyer = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -23,7 +24,7 @@ const NavbarBuyer = () => {
   };
 
   return (
-    <nav className="bg-white shadow-md sticky top-0 z-50">
+    <nav className="bg-background shadow-md dark:shadow-2xl sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           <Link href="/" className="flex items-center">
@@ -31,29 +32,31 @@ const NavbarBuyer = () => {
           </Link>
 
           {/* Desktop Menu */}
-          <div className="hidden md:flex items-center space-x-6">
+          <div className="hidden md:flex items-center space-x-4">
             {buyerLinks.map((link) => (
               <Link
                 key={link.name}
                 href={link.href}
-                className="text-gray-700 hover:text-orange-600 font-medium transition"
+                className="text-foreground hover:text-orange-primary font-medium transition-colors hover:text-orange-500"
               >
                 {link.name}
               </Link>
             ))}
+            <ThemeToggle />
             <button
               onClick={handleSignOut}
-              className="bg-orange-600 text-white px-4 py-2 rounded-xl shadow hover:bg-orange-700 transition"
+              className="bg-red-600 text-white px-4 py-2 rounded-xl shadow hover:bg-orange-700 transition-colors"
             >
               Sign Out
             </button>
           </div>
 
           {/* Mobile Menu Toggle */}
-          <div className="md:hidden">
+          <div className="md:hidden flex items-center space-x-2">
+            <ThemeToggle />
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="text-gray-700"
+              className="text-foreground"
             >
               {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -63,12 +66,12 @@ const NavbarBuyer = () => {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-white border-t border-gray-200 px-4 pb-4 space-y-2 shadow-sm">
+        <div className="md:hidden bg-card px-4 pb-4 space-y-2 shadow-sm dark:shadow-2xl">
           {buyerLinks.map((link) => (
             <Link
               key={link.name}
               href={link.href}
-              className="block text-gray-700 font-medium hover:text-orange-600 transition"
+              className="block text-card-foreground font-medium hover:text-orange-primary transition-colors hover:text-orange-500"
               onClick={() => setMobileMenuOpen(false)}
             >
               {link.name}
@@ -76,7 +79,7 @@ const NavbarBuyer = () => {
           ))}
           <button
             onClick={handleSignOut}
-            className="w-full bg-orange-600 text-white py-2 rounded-xl mt-2 hover:bg-orange-700 transition"
+            className="w-full bg-orange-500 text-white py-2 rounded-xl mt-2 hover:bg-orange-600 transition-colors shadow-2xl"
           >
             Sign Out
           </button>
