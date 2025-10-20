@@ -4,6 +4,7 @@ export interface DecodedUser {
   role: string;
   iat?: number;
   exp?: number;
+  name?: string;
 }
 
 export const getUserFromToken = (): DecodedUser | null => {
@@ -21,6 +22,7 @@ export const getUserFromToken = (): DecodedUser | null => {
       role: parsed.role,
       iat: parsed.iat,
       exp: parsed.exp,
+      name: parsed.name,
     };
   } catch (err) {
     console.error("Failed to decode JWT", err);

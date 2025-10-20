@@ -107,7 +107,7 @@ export default function SellerProductsPage() {
   return (
     <RoleGuard allowedRoles={["SELLER"]}>
       <div className="px-4 md:px-8 py-6">
-        <h1 className="text-2xl font-bold text-orange-700 mb-6">
+        <h1 className="text-2xl font-bold text-orange-primary mb-6">
           Your Products
         </h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

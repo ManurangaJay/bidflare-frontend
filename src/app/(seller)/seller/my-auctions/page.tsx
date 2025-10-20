@@ -133,7 +133,7 @@ export default function MyAuctionsPage() {
   return (
     <RoleGuard allowedRoles={["SELLER"]}>
       <div className="px-4 md:px-8 py-6">
-        <h1 className="text-2xl md:text-3xl font-bold mb-6 text-orange-600">
+        <h1 className="text-2xl md:text-3xl font-bold mb-6 text-orange-primary">
           My Auctions
         </h1>
 

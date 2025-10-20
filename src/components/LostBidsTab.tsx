@@ -9,7 +9,9 @@ interface TabProps {
 export default function LostBidsTab({ bids, userId }: TabProps) {
   if (bids.length === 0) {
     return (
-      <div className="text-center py-10 text-gray-500">No lost bids found.</div>
+      <div className="text-center py-10 text-muted-foreground">
+        No lost bids found.
+      </div>
     );
   }
 

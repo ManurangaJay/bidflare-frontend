@@ -18,8 +18,8 @@ export default function BidsList({
 }) {
   if (!bids || bids.length === 0) {
     return (
-      <div className="mt-8 p-4 border border-gray-200 rounded-lg bg-gray-50">
-        <p className="text-sm text-gray-500">No bids yet.</p>
+      <div className="mt-8 p-4 border border-border rounded-lg bg-muted">
+        <p className="text-sm text-muted-foreground">No bids yet.</p>
       </div>
     );
   }
@@ -28,8 +28,10 @@ export default function BidsList({
   const maxAmount = sortedBids[0].amount;
 
   return (
-    <div className="mt-8 p-4 border border-orange-200 rounded-lg bg-gray-50 shadow-md">
-      <h2 className="text-lg font-semibold text-gray-700 mb-4">Bid History</h2>
+    <div className="mt-8 p-4 border border-orange-primary/20 rounded-lg bg-muted shadow-md">
+      <h2 className="text-lg font-semibold text-foreground mb-4">
+        Bid History
+      </h2>
       <ul className="space-y-3">
         {sortedBids.map((bid) => {
           const widthPercent = (bid.amount / maxAmount) * 100;
@@ -40,27 +42,29 @@ export default function BidsList({
               key={bid.id}
               className={`rounded-lg shadow-sm p-3 border text-sm ${
                 isUserBid
-                  ? "bg-blue-50 border-blue-400"
-                  : "bg-white border-gray-100"
+                  ? "bg-blue-50 border-blue-400 dark:bg-blue-900/30 dark:border-blue-600"
+                  : "bg-card border-border"
               }`}
             >
               <div className="flex justify-between mb-1">
                 <span
                   className={`font-medium ${
-                    isUserBid ? "text-blue-700" : "text-gray-800"
+                    isUserBid
+                      ? "text-blue-700 dark:text-blue-300"
+                      : "text-card-foreground"
                   }`}
                 >
                   ${bid.amount.toFixed(2)}{" "}
                   {isUserBid && <span className="text-xs">(You)</span>}
                 </span>
-                <span className="text-xs text-gray-500">
+                <span className="text-xs text-muted-foreground">
                   {format(new Date(bid.createdAt), "PPpp")}
                 </span>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
+              <div className="w-full bg-muted rounded-full h-2">
                 <div
                   className={`h-2 rounded-full transition-all ${
-                    isUserBid ? "bg-blue-500" : "bg-orange-500"
+                    isUserBid ? "bg-blue-500" : "bg-orange-primary"
                   }`}
                   style={{ width: `${widthPercent}%` }}
                 />

@@ -57,7 +57,7 @@ export default function HomePage() {
         </p>
         <div className="flex flex-col sm:flex-row gap-4">
           <Link href="/register">
-            <button className="bg-orange-600 font-semibold text-primary-foreground px-6 py-3 rounded-xl shadow hover:bg-orange-700 transition-colors">
+            <button className="bg-orange-600 font-semibold text-white px-6 py-3 rounded-xl shadow hover:bg-orange-700 transition-colors">
               Register
             </button>
           </Link>
@@ -168,7 +168,7 @@ export default function HomePage() {
         </p>
         <div className="flex flex-col sm:flex-row justify-center gap-4">
           <Link href="/register">
-            <button className="bg-orange-500 dark:hover:bg-orange-600 text-orange-primary px-6 py-3 rounded-xl font-semibold shadow hover:bg-orange-secondary transition-colors">
+            <button className="bg-orange-500 dark:hover:bg-orange-600 text-white px-6 py-3 rounded-xl font-semibold shadow hover:bg-orange-secondary transition-colors">
               Get Started
             </button>
           </Link>

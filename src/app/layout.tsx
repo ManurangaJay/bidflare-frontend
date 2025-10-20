@@ -1,5 +1,3 @@
-import NavbarHome from "@/components/NavbarHome";
-import Footer from "@/components/FooterHome";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
@@ -7,7 +5,7 @@ import { ThemeProvider } from "@/contexts/ThemeContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function HomeLayout({
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -16,7 +14,7 @@ export default function HomeLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <ThemeProvider>
-          <main>{children}</main>
+          {children}
           <Toaster richColors position="bottom-right" />
         </ThemeProvider>
       </body>

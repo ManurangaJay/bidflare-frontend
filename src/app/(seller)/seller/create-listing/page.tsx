@@ -104,158 +104,186 @@ const CreateListing = () => {
 
   return (
     <RoleGuard allowedRoles={["SELLER"]}>
-      <div className="max-w-6xl mx-auto px-4 py-10">
-        <h1 className="text-3xl font-bold text-orange-700 mb-6">
-          Create a New Listing
-        </h1>
-        <form
-          onSubmit={handleSubmit}
-          className="grid grid-cols-1 lg:grid-cols-2 gap-8 bg-white p-8 rounded-xl"
-        >
-          {/* Left column - Product Details */}
-          <div className="space-y-6">
-            <div>
-              <h2 className="text-xl font-semibold text-orange-700 mb-2">
-                🛍️ Product Details
-              </h2>
-              <label className="block font-medium text-sm mb-1">Title</label>
-              <input
-                type="text"
-                className="w-full border border-gray-200 rounded-sm px-4 py-2 focus:outline-none focus:border-orange-100 focus:ring-2 focus:ring-orange-100"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                required
-              />
-            </div>
+      <div className="min-h-screen bg-gradient-to-br from-orange-secondary/20 to-orange-primary/10 px-4 py-10">
+        <div className="max-w-6xl mx-auto">
+          <h1 className="text-4xl font-bold text-card-foreground mb-6 text-center">
+            Create a New{" "}
+            <span className="text-orange-500 bg-orange-secondary/30 px-2 py-1 rounded-lg text-5xl font-bold">
+              Listing
+            </span>
+          </h1>
+          <form
+            onSubmit={handleSubmit}
+            className="grid grid-cols-1 lg:grid-cols-2 gap-8 bg-card/90 backdrop-blur-sm p-8 rounded-3xl "
+          >
+            {/* Left column - Product Details */}
+            <div className="space-y-6">
+              <div>
+                <h2 className="text-2xl font-semibold text-orange-500 mb-4 bg-orange-secondary/20 px-4 py-2 rounded-lg">
+                  🛍️ Product Details
+                </h2>
+                <label className="block font-medium text-sm mb-2 text-foreground">
+                  Title
+                </label>
+                <input
+                  type="text"
+                  className="w-full backdrop-blur-sm rounded-2xl px-4 py-3 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 focus:bg-background/80 outline-none text-foreground transition-all duration-300 shadow-lg"
+                  style={{ backgroundColor: "var(--muted)" }}
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  required
+                />
+              </div>
 
-            <div>
-              <label className="block font-medium text-sm mb-1">
-                Description
-              </label>
-              <textarea
-                className="w-full border border-gray-200 rounded-sm px-4 py-2 focus:outline-none focus:border-orange-100 focus:ring-2 focus:ring-orange-100"
-                rows={4}
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                required
-              />
-            </div>
+              <div>
+                <label className="block font-medium text-sm mb-2 text-foreground">
+                  Description
+                </label>
+                <textarea
+                  className="w-full backdrop-blur-sm rounded-2xl px-4 py-3 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 focus:bg-background/80 outline-none text-foreground transition-all duration-300 shadow-lg"
+                  style={{ backgroundColor: "var(--muted)" }}
+                  rows={4}
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  required
+                />
+              </div>
 
-            <div>
-              <label className="block font-medium text-sm mb-1">Category</label>
-              <select
-                value={categoryId}
-                onChange={(e) => setCategoryId(e.target.value)}
-                required
-                className="w-full border border-gray-200 rounded-sm px-4 py-2 focus:outline-none focus:border-orange-100 focus:ring-2 focus:ring-orange-100"
-              >
-                <option value="">Select category</option>
-                {categories.map((cat) => (
-                  <option key={cat.id} value={cat.id}>
-                    {cat.name}
-                  </option>
-                ))}
-              </select>
-            </div>
+              <div>
+                <label className="block font-medium text-sm mb-2 text-foreground">
+                  Category
+                </label>
+                <select
+                  value={categoryId}
+                  onChange={(e) => setCategoryId(e.target.value)}
+                  required
+                  className="w-full backdrop-blur-sm rounded-2xl px-4 py-3 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 focus:bg-background/80 outline-none text-foreground transition-all duration-300 shadow-lg"
+                  style={{ backgroundColor: "var(--muted)" }}
+                >
+                  <option value="">Select category</option>
+                  {categories.map((cat) => (
+                    <option key={cat.id} value={cat.id}>
+                      {cat.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-            <div>
-              <label className="block font-medium text-sm mb-1">Tags</label>
-              <input
-                type="text"
-                className="w-full border border-gray-200 rounded-sm px-4 py-2 focus:outline-none focus:border-orange-100 focus:ring-2 focus:ring-orange-100"
-                placeholder="e.g., electronics, gadgets"
-                value={tags}
-                onChange={(e) => setTags(e.target.value)}
-              />
-            </div>
+              <div>
+                <label className="block font-medium text-sm mb-2 text-foreground">
+                  Tags
+                </label>
+                <input
+                  type="text"
+                  className="w-full backdrop-blur-sm rounded-2xl px-4 py-3 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 focus:bg-background/80 outline-none text-foreground transition-all duration-300 shadow-lg"
+                  style={{ backgroundColor: "var(--muted)" }}
+                  placeholder="e.g., electronics, gadgets"
+                  value={tags}
+                  onChange={(e) => setTags(e.target.value)}
+                />
+              </div>
 
-            <div>
-              <label className="block font-medium text-sm mb-1">
-                Starting Price ($)
-              </label>
-              <input
-                type="number"
-                className="w-full border border-gray-200 rounded-sm px-4 py-2 focus:outline-none focus:border-orange-100 focus:ring-2 focus:ring-orange-100"
-                value={startingPrice}
-                onChange={(e) => setStartingPrice(e.target.value)}
-                required
-                min="0"
-                step="0.01"
-              />
-            </div>
-          </div>
-
-          {/* Right column - Auction, Media, Settings */}
-          <div className="space-y-6">
-            <div>
-              <h2 className="text-xl font-semibold text-orange-700 mb-2">
-                ⏰ Auction Settings
-              </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block font-medium text-sm mb-1">
-                    Start Time
-                  </label>
-                  <input
-                    type="datetime-local"
-                    className="w-full border border-gray-200 rounded-sm px-4 py-2 focus:outline-none focus:border-orange-100 focus:ring-2 focus:ring-orange-100"
-                    value={startTime}
-                    onChange={(e) => setStartTime(e.target.value)}
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block font-medium text-sm mb-1">
-                    End Time
-                  </label>
-                  <input
-                    type="datetime-local"
-                    className="w-full border border-gray-200 rounded-sm px-4 py-2 focus:outline-none focus:border-orange-100 focus:ring-2 focus:ring-orange-100"
-                    value={endTime}
-                    onChange={(e) => setEndTime(e.target.value)}
-                    required
-                  />
-                </div>
+              <div>
+                <label className="block font-medium text-sm mb-2 text-foreground">
+                  Starting Price ($)
+                </label>
+                <input
+                  type="number"
+                  className="w-full backdrop-blur-sm rounded-2xl px-4 py-3 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 focus:bg-background/80 outline-none text-foreground transition-all duration-300 shadow-lg"
+                  style={{ backgroundColor: "var(--muted)" }}
+                  value={startingPrice}
+                  onChange={(e) => setStartingPrice(e.target.value)}
+                  required
+                  min="0"
+                  step="0.01"
+                />
               </div>
             </div>
 
-            <div>
-              <h2 className="text-xl font-semibold text-orange-700 mb-2">
-                📷 Media Upload
-              </h2>
-              <input
-                type="file"
-                multiple
-                accept="image/*,video/*"
-                className="w-full border border-gray-200 rounded-sm px-4 py-2 focus:outline-none focus:border-orange-100 focus:ring-2 focus:ring-orange-100"
-                onChange={handleFileChange}
-              />
+            {/* Right column - Auction, Media, Settings */}
+            <div className="space-y-6">
+              <div>
+                <h2 className="text-2xl font-semibold text-orange-500 mb-4 bg-orange-secondary/20 px-4 py-2 rounded-lg">
+                  ⏰ Auction Settings
+                </h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block font-medium text-sm mb-2 text-foreground">
+                      Start Time
+                    </label>
+                    <input
+                      type="datetime-local"
+                      className="w-full backdrop-blur-sm rounded-2xl px-4 py-3 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 focus:bg-background/80 outline-none text-foreground transition-all duration-300 shadow-lg"
+                      style={{ backgroundColor: "var(--muted)" }}
+                      value={startTime}
+                      onChange={(e) => setStartTime(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block font-medium text-sm mb-2 text-foreground">
+                      End Time
+                    </label>
+                    <input
+                      type="datetime-local"
+                      className="w-full backdrop-blur-sm rounded-2xl px-4 py-3 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 focus:bg-background/80 outline-none text-foreground transition-all duration-300 shadow-lg"
+                      style={{ backgroundColor: "var(--muted)" }}
+                      value={endTime}
+                      onChange={(e) => setEndTime(e.target.value)}
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h2 className="text-2xl font-semibold text-orange-500 mb-4 bg-orange-secondary/20 px-4 py-2 rounded-lg">
+                  📷 Media Upload
+                </h2>
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*,video/*"
+                  className="w-full backdrop-blur-sm rounded-2xl px-4 py-3 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 focus:bg-background/80 outline-none text-foreground transition-all duration-300 shadow-lg"
+                  style={{ backgroundColor: "var(--muted)" }}
+                  onChange={handleFileChange}
+                />
+              </div>
+
+              <div className="flex items-center bg-orange-secondary/10 p-4 rounded-2xl">
+                <input
+                  type="checkbox"
+                  id="qaToggle"
+                  className="mr-3 w-5 h-5 text-orange-500 focus:ring-orange-500 rounded"
+                  style={{ backgroundColor: "var(--muted)" }}
+                  checked={qaEnabled}
+                  onChange={(e) => setQaEnabled(e.target.checked)}
+                />
+                <label
+                  htmlFor="qaToggle"
+                  className="text-foreground font-medium"
+                >
+                  Enable Q&A Section (optional)
+                </label>
+              </div>
+
+              {error && (
+                <p className="text-destructive text-sm bg-destructive/10 p-3 rounded-lg font-medium">
+                  {error}
+                </p>
+              )}
+
+              <button
+                type="submit"
+                className="w-full bg-gradient-to-r from-orange-400 to-orange-600 dark:from-orange-400 dark:to-orange-700 text-white py-3 rounded-2xl hover:scale-y-105 shadow-lg hover:shadow-xl font-semibold"
+                style={{ transition: "all 0.3s ease-in-out" }}
+                disabled={loading}
+              >
+                {loading ? "Creating Listing..." : "Submit Listing"}
+              </button>
             </div>
-
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="qaToggle"
-                className="mr-2"
-                checked={qaEnabled}
-                onChange={(e) => setQaEnabled(e.target.checked)}
-              />
-              <label htmlFor="qaToggle" className="text-gray-700">
-                Enable Q&A Section (optional)
-              </label>
-            </div>
-
-            {error && <p className="text-red-600 font-medium">{error}</p>}
-
-            <button
-              type="submit"
-              className="bg-orange-600 text-white px-6 py-3 rounded-xl shadow hover:bg-orange-700 transition w-full"
-              disabled={loading}
-            >
-              {loading ? "Creating Listing..." : "Submit Listing"}
-            </button>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </RoleGuard>
   );

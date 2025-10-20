@@ -9,8 +9,8 @@ interface TabProps {
 export default function AllBidsTab({ bids, userId }: TabProps) {
   if (bids.length === 0) {
     return (
-      <div className="text-center py-10 text-gray-500">
-        You haven’t placed any bids yet.
+      <div className="text-center py-10 text-muted-foreground">
+        You haven't placed any bids yet.
       </div>
     );
   }

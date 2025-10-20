@@ -186,18 +186,21 @@ export default function ProfilePage() {
       <div className="p-4 sm:p-6">
         <div className="flex justify-between items-center">
           <div>
-            <label className="text-sm font-medium text-gray-500">{label}</label>
+            <label className="text-sm font-medium text-muted-foreground">
+              {label}
+            </label>
             {isEditing ? (
               <input
                 type={type}
                 name={field}
                 value={formData[field] || ""}
                 onChange={handleInputChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm"
+                className="mt-1 block w-full rounded-2xl px-4 py-3 shadow-sm focus:ring-1 focus:ring-orange-500 focus:border-orange-500 focus:bg-background/80 outline-none text-foreground sm:text-sm backdrop-blur-sm"
+                style={{ backgroundColor: "var(--muted)" }}
                 disabled={isSubmitting}
               />
             ) : (
-              <p className="text-lg text-gray-900">{user?.[field]}</p>
+              <p className="text-lg text-card-foreground">{user?.[field]}</p>
             )}
           </div>
           {field !== "email" && (
@@ -206,7 +209,7 @@ export default function ProfilePage() {
                 <>
                   <button
                     onClick={() => handleSave(field as EditableField)}
-                    className="p-2 text-green-600 hover:bg-green-100 rounded-full disabled:opacity-50"
+                    className="p-2 text-green-600 hover:bg-green-100 dark:text-green-400 dark:hover:bg-green-900/30 rounded-full disabled:opacity-50"
                     disabled={isSubmitting}
                   >
                     {isSubmitting ? (
@@ -217,7 +220,7 @@ export default function ProfilePage() {
                   </button>
                   <button
                     onClick={handleCancel}
-                    className="p-2 text-red-600 hover:bg-red-100 rounded-full"
+                    className="p-2 text-destructive hover:bg-destructive/10 rounded-full"
                     disabled={isSubmitting}
                   >
                     <XCircle size={20} />
@@ -226,7 +229,7 @@ export default function ProfilePage() {
               ) : (
                 <button
                   onClick={() => setEditingField(field as EditableField)}
-                  className="p-2 text-gray-500 hover:bg-gray-100 rounded-full"
+                  className="p-2 text-muted-foreground hover:bg-muted rounded-full"
                 >
                   <Pencil size={20} />
                 </button>
@@ -240,15 +243,15 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen bg-gray-50">
-        <Loader2 className="animate-spin text-orange-600" size={48} />
+      <div className="flex justify-center items-center min-h-screen bg-background">
+        <Loader2 className="animate-spin text-orange-primary" size={48} />
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="text-center text-red-500 p-8">
+      <div className="text-center text-destructive p-8">
         Error: {error}. Please try refreshing the page.
       </div>
     );
@@ -256,29 +259,33 @@ export default function ProfilePage() {
 
   if (!user) {
     return (
-      <div className="text-center text-gray-500 p-8">
+      <div className="text-center text-muted-foreground p-8">
         Could not find user profile.
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen p-4 sm:p-6 lg:p-8">
+    <div className="min-h-screen bg-gradient-to-br from-orange-secondary/20 to-orange-primary/10 p-4 sm:p-6 lg:p-8">
       <div className="max-w-3xl mx-auto space-y-8">
-        <h1 className="text-3xl font-bold text-gray-900">My Profile</h1>
+        <h1 className="text-3xl font-bold text-orange-500 align-middle">
+          Manage Your Profile
+        </h1>
 
         {/* Personal Details Section */}
-        <div className="bg-white rounded-2xl overflow-hidden shadow-sm">
+        <div className="bg-card/90 backdrop-blur-sm rounded-2xl shadow-2xl overflow-hidden">
           <div className="p-6">
-            <h2 className="text-2xl font-bold text-orange-900">My Details</h2>
-            <hr className="border-orange-200 mt-4" />
+            <h2 className="text-2xl font-bold text-orange-500">My Details</h2>
+            <div className="w-full h-px bg-gradient-to-r from-orange-500/30 to-transparent mt-4"></div>
           </div>
-          <div className="divide-y divide-gray-200">
+          <div className="divide-y divide-border/50">
             {renderField("Full Name", "name")}
             {renderField("Email", "email", "email")}
             <div className="p-4 sm:p-6">
-              <label className="text-sm font-medium text-gray-500">Role</label>
-              <p className="text-lg text-gray-900 capitalize">
+              <label className="text-sm font-medium text-muted-foreground">
+                Role
+              </label>
+              <p className="text-lg text-card-foreground capitalize">
                 {user.role.toLowerCase()}
               </p>
             </div>
@@ -288,38 +295,38 @@ export default function ProfilePage() {
         <AddressSection />
 
         {/* Password Reset Section */}
-        <div className="bg-white rounded-2xl overflow-hidden shadow-sm">
+        <div className="bg-card/90 backdrop-blur-sm rounded-2xl shadow-2xl overflow-hidden">
           <div className="p-6">
-            <h2 className="text-2xl font-bold text-orange-900">Security</h2>
-            <hr className="border-orange-200 mt-4" />
+            <h2 className="text-2xl font-bold text-orange-500">Security</h2>
+            <div className="w-full h-px bg-gradient-to-r from-orange-500/30 to-transparent mt-4"></div>
             <div className="mt-6">
               {!isResettingPassword ? (
                 <div className="flex justify-between items-center">
                   <div>
-                    <h3 className="text-lg font-medium text-gray-900">
+                    <h3 className="text-lg font-medium text-card-foreground">
                       Password
                     </h3>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-muted-foreground">
                       Set a new password for your account.
                     </p>
                   </div>
                   <button
                     onClick={() => setIsResettingPassword(true)}
-                    className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-orange-600 rounded-lg hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+                    className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-orange-400 to-orange-600 dark:from-orange-400 dark:to-orange-700 rounded-2xl hover:scale-y-105 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
                   >
                     <KeyRound size={16} /> Change
                   </button>
                 </div>
               ) : (
                 <form onSubmit={handlePasswordUpdate}>
-                  <h3 className="text-lg font-medium text-gray-900 mb-4">
+                  <h3 className="text-lg font-medium text-card-foreground mb-4">
                     Change Your Password
                   </h3>
                   <div className="space-y-4">
                     <div>
                       <label
                         htmlFor="newPassword"
-                        className="block text-sm font-medium text-gray-700"
+                        className="block text-sm font-medium text-foreground"
                       >
                         New Password
                       </label>
@@ -331,14 +338,15 @@ export default function ProfilePage() {
                           value={passwordData.newPassword}
                           onChange={handlePasswordDataChange}
                           disabled={isPasswordSubmitting}
-                          className="block w-full rounded-md border-gray-300 pr-10 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm"
+                          className="block w-full rounded-2xl px-4 py-3 pr-10 shadow-sm focus:ring-1 focus:ring-orange-500 focus:border-orange-500 focus:bg-background/80 outline-none text-foreground sm:text-sm backdrop-blur-sm"
+                          style={{ backgroundColor: "var(--muted)" }}
                           placeholder="••••••••"
                           required
                         />
                         <button
                           type="button"
                           onClick={() => setShowNewPassword((prev) => !prev)}
-                          className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600"
+                          className="absolute inset-y-0 right-0 flex items-center pr-3 text-muted-foreground hover:text-foreground"
                           aria-label={
                             showNewPassword ? "Hide password" : "Show password"
                           }
@@ -354,7 +362,7 @@ export default function ProfilePage() {
                     <div>
                       <label
                         htmlFor="confirmPassword"
-                        className="block text-sm font-medium text-gray-700"
+                        className="block text-sm font-medium text-foreground"
                       >
                         Confirm New Password
                       </label>
@@ -366,7 +374,8 @@ export default function ProfilePage() {
                           value={passwordData.confirmPassword}
                           onChange={handlePasswordDataChange}
                           disabled={isPasswordSubmitting}
-                          className="block w-full rounded-md border-gray-300 pr-10 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm"
+                          className="block w-full rounded-2xl px-4 py-3 pr-10 shadow-sm focus:ring-1 focus:ring-orange-500 focus:border-orange-500 focus:bg-background/80 outline-none text-foreground sm:text-sm backdrop-blur-sm"
+                          style={{ backgroundColor: "var(--muted)" }}
                           placeholder="••••••••"
                           required
                         />
@@ -375,7 +384,7 @@ export default function ProfilePage() {
                           onClick={() =>
                             setShowConfirmPassword((prev) => !prev)
                           }
-                          className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600"
+                          className="absolute inset-y-0 right-0 flex items-center pr-3 text-muted-foreground hover:text-foreground"
                           aria-label={
                             showConfirmPassword
                               ? "Hide password"
@@ -396,14 +405,14 @@ export default function ProfilePage() {
                       type="button"
                       onClick={handlePasswordUpdateCancel}
                       disabled={isPasswordSubmitting}
-                      className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+                      className="px-4 py-2 text-sm font-medium text-card-foreground bg-card rounded-2xl shadow-sm hover:bg-muted focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
                       disabled={isPasswordSubmitting}
-                      className="inline-flex justify-center items-center px-4 py-2 text-sm font-medium text-white bg-green-600 border border-transparent rounded-md shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50"
+                      className="inline-flex justify-center items-center px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-orange-400 to-orange-600 dark:from-orange-400 dark:to-orange-700 rounded-2xl shadow-sm hover:scale-y-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 disabled:opacity-50"
                     >
                       {isPasswordSubmitting ? (
                         <>

@@ -109,16 +109,18 @@ export default function AuctionsPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
-      <h1 className="text-4xl font-bold text-orange-600 mb-6 text-center">
+      <h1 className="text-4xl font-bold text-orange-primary mb-6 text-center">
         🔥 Live & Upcoming Auctions
       </h1>
-      <p className="text-gray-500 text-center mb-10 max-w-xl mx-auto">
-        Browse all auctions currently open for bidding or starting soon. Don’t
+      <p className="text-muted-foreground text-center mb-10 max-w-xl mx-auto">
+        Browse all auctions currently open for bidding or starting soon. Don't
         miss your chance!
       </p>
 
-      {loading && <p className="text-gray-500 text-center">Loading...</p>}
-      {error && <p className="text-red-600 text-center">Error: {error}</p>}
+      {loading && (
+        <p className="text-muted-foreground text-center">Loading...</p>
+      )}
+      {error && <p className="text-destructive text-center">Error: {error}</p>}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {currentAuctions.map((auction) => (
@@ -142,7 +144,7 @@ export default function AuctionsPage() {
           <button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
-            className="px-3 py-1 rounded-xl border border-gray-300 text-gray-600 hover:bg-orange-100 disabled:opacity-50"
+            className="px-3 py-1 rounded-xl border border-border text-muted-foreground hover:bg-orange-secondary/50 disabled:opacity-50"
           >
             Prev
           </button>
@@ -153,8 +155,8 @@ export default function AuctionsPage() {
               onClick={() => handlePageChange(page)}
               className={`px-3 py-1 rounded-xl border ${
                 page === currentPage
-                  ? "bg-orange-600 text-white border-orange-600"
-                  : "border-gray-300 text-gray-600 hover:bg-orange-100"
+                  ? "bg-orange-primary text-primary-foreground border-orange-primary"
+                  : "border-border text-muted-foreground hover:bg-orange-secondary/50"
               }`}
             >
               {page}
@@ -164,7 +166,7 @@ export default function AuctionsPage() {
           <button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className="px-3 py-1 rounded-xl border border-gray-300 text-gray-600 hover:bg-orange-100 disabled:opacity-50"
+            className="px-3 py-1 rounded-xl border border-border text-muted-foreground hover:bg-orange-secondary/50 disabled:opacity-50"
           >
             Next
           </button>

@@ -168,25 +168,25 @@ export function AddressSection() {
   };
 
   return (
-    <div className="bg-white rounded-2xl overflow-hidden shadow-sm p-6">
+    <div className="bg-card rounded-2xl overflow-hidden shadow-sm p-6 border border-border">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold text-orange-900">My Addresses</h2>
+        <h2 className="text-2xl font-bold text-orange-primary">My Addresses</h2>
         <button
           onClick={handleAddNew}
-          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-orange-600 rounded-lg hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-primary-foreground bg-orange-primary rounded-lg hover:bg-orange-accent focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-primary"
         >
           <Plus size={16} /> Add New
         </button>
       </div>
-      <hr className="border-orange-300" />
+      <hr className="border-orange-primary/30" />
 
-      <div className="bg-white rounded-2xl overflow-hidden p-4 mt-4">
+      <div className="bg-card rounded-2xl overflow-hidden p-4 mt-4 border border-border">
         {loading ? (
           <div className="flex justify-center items-center p-8">
-            <Loader2 className="animate-spin text-orange-500" size={32} />
+            <Loader2 className="animate-spin text-orange-primary" size={32} />
           </div>
         ) : error ? (
-          <p className="text-red-500 text-center">{error}</p>
+          <p className="text-destructive text-center">{error}</p>
         ) : addresses.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {addresses.map((address) => (
@@ -194,25 +194,25 @@ export function AddressSection() {
                 key={address.id}
                 className={`p-4 rounded-lg border ${
                   address.isDefault
-                    ? "border-orange-500 bg-orange-50"
-                    : "border-gray-200"
+                    ? "border-orange-primary bg-orange-secondary/50 dark:bg-orange-primary/20"
+                    : "border-border bg-card"
                 }`}
               >
                 <div className="flex justify-between items-start">
                   <div className="flex items-center gap-2">
-                    <Home size={20} className="text-orange-700" />
-                    <h3 className="font-bold text-lg text-gray-800">
+                    <Home size={20} className="text-orange-primary" />
+                    <h3 className="font-bold text-lg text-card-foreground">
                       {address.label}
                     </h3>
                   </div>
                   {address.isDefault && (
-                    <div className="flex items-center gap-1 text-sm bg-orange-500 text-white px-2 py-1 rounded-full">
+                    <div className="flex items-center gap-1 text-sm bg-orange-primary text-primary-foreground px-2 py-1 rounded-full">
                       <Star size={14} />
                       <span>Default</span>
                     </div>
                   )}
                 </div>
-                <div className="text-gray-600 mt-2 space-y-1">
+                <div className="text-muted-foreground mt-2 space-y-1">
                   <p>{address.addressLine1}</p>
                   {address.addressLine2 && <p>{address.addressLine2}</p>}
                   <p>
@@ -224,7 +224,7 @@ export function AddressSection() {
                   {!address.isDefault && (
                     <button
                       onClick={() => handleSetDefault(address.id)}
-                      className="text-sm font-medium text-orange-600 hover:text-orange-800"
+                      className="text-sm font-medium text-orange-primary hover:text-orange-accent"
                     >
                       Set as Default
                     </button>
@@ -232,13 +232,13 @@ export function AddressSection() {
                   <div className="flex items-center gap-2 ml-auto">
                     <button
                       onClick={() => handleEdit(address)}
-                      className="p-2 text-gray-500 hover:bg-gray-200 rounded-full"
+                      className="p-2 text-muted-foreground hover:bg-muted rounded-full"
                     >
                       <Pencil size={18} />
                     </button>
                     <button
                       onClick={() => handleDelete(address.id)}
-                      className="p-2 text-red-500 hover:bg-red-100 rounded-full"
+                      className="p-2 text-destructive hover:bg-destructive/10 rounded-full"
                     >
                       <Trash2 size={18} />
                     </button>
@@ -249,8 +249,8 @@ export function AddressSection() {
           </div>
         ) : (
           <div className="text-center py-8">
-            <MapPin className="mx-auto text-gray-400" size={40} />
-            <p className="mt-2 text-gray-500">
+            <MapPin className="mx-auto text-muted-foreground" size={40} />
+            <p className="mt-2 text-muted-foreground">
               You haven't added any addresses yet.
             </p>
           </div>
@@ -259,15 +259,15 @@ export function AddressSection() {
 
       {/* Form Modal */}
       {isFormOpen && (
-        <div className="fixed inset-0 backdrop-blur-sm bg-opacity-50 flex justify-center items-center p-4 z-50 shadow-2xl border ">
-          <div className="bg-white rounded-2xl p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto ">
+        <div className="fixed inset-0 backdrop-blur-md bg-black/60 flex justify-center items-center p-4 z-50 shadow-2xl">
+          <div className="bg-card rounded-2xl p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold text-orange-900">
+              <h2 className="text-xl font-bold text-orange-primary">
                 {editingAddress ? "Edit Address" : "Add New Address"}
               </h2>
               <button
                 onClick={() => setIsFormOpen(false)}
-                className="p-1 rounded-full hover:bg-gray-200"
+                className="p-1 rounded-full hover:bg-muted"
               >
                 <X size={24} />
               </button>
@@ -275,7 +275,7 @@ export function AddressSection() {
             <form onSubmit={handleSubmit} className="space-y-4">
               {/* Form fields */}
               <div>
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-sm font-medium text-foreground">
                   Label (e.g. Home, Work)
                 </label>
                 <input
@@ -283,12 +283,12 @@ export function AddressSection() {
                   name="label"
                   value={formData.label}
                   onChange={handleFormChange}
-                  className="mt-1 block w-full rounded-sm border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 p-2"
+                  className="mt-1 block w-full rounded-sm border-input shadow-sm focus:border-orange-primary focus:ring-orange-primary bg-background text-foreground p-2"
                   required
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-sm font-medium text-foreground">
                   Address Line 1
                 </label>
                 <input
@@ -296,12 +296,12 @@ export function AddressSection() {
                   name="addressLine1"
                   value={formData.addressLine1}
                   onChange={handleFormChange}
-                  className="mt-1 block w-full rounded-sm border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 p-2"
+                  className="mt-1 block w-full rounded-sm border-input shadow-sm focus:border-orange-primary focus:ring-orange-primary bg-background text-foreground p-2"
                   required
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-sm font-medium text-foreground">
                   Address Line 2 (Optional)
                 </label>
                 <input
@@ -309,12 +309,12 @@ export function AddressSection() {
                   name="addressLine2"
                   value={formData.addressLine2 || ""}
                   onChange={handleFormChange}
-                  className="mt-1 block w-full rounded-sm border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 p-2"
+                  className="mt-1 block w-full rounded-sm border-input shadow-sm focus:border-orange-primary focus:ring-orange-primary bg-background text-foreground p-2"
                 />
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-foreground">
                     City
                   </label>
                   <input
@@ -322,12 +322,12 @@ export function AddressSection() {
                     name="city"
                     value={formData.city}
                     onChange={handleFormChange}
-                    className="mt-1 block w-full rounded-sm border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 p-2"
+                    className="mt-1 block w-full rounded-sm border-input shadow-sm focus:border-orange-primary focus:ring-orange-primary bg-background text-foreground p-2"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-foreground">
                     State / Province
                   </label>
                   <input
@@ -335,14 +335,14 @@ export function AddressSection() {
                     name="stateProvince"
                     value={formData.stateProvince}
                     onChange={handleFormChange}
-                    className="mt-1 block w-full rounded-sm border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 p-2"
+                    className="mt-1 block w-full rounded-sm border-input shadow-sm focus:border-orange-primary focus:ring-orange-primary bg-background text-foreground p-2"
                     required
                   />
                 </div>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-foreground">
                     Postal Code
                   </label>
                   <input
@@ -350,12 +350,12 @@ export function AddressSection() {
                     name="postalCode"
                     value={formData.postalCode}
                     onChange={handleFormChange}
-                    className="mt-1 block w-full rounded-sm border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 p-2"
+                    className="mt-1 block w-full rounded-sm border-input shadow-sm focus:border-orange-primary focus:ring-orange-primary bg-background text-foreground p-2"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-foreground">
                     Country
                   </label>
                   <input
@@ -363,7 +363,7 @@ export function AddressSection() {
                     name="country"
                     value={formData.country}
                     onChange={handleFormChange}
-                    className="mt-1 block w-full rounded-sm border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 p-2"
+                    className="mt-1 block w-full rounded-sm border-input shadow-sm focus:border-orange-primary focus:ring-orange-primary bg-background text-foreground p-2"
                     required
                   />
                 </div>
@@ -375,11 +375,11 @@ export function AddressSection() {
                   type="checkbox"
                   checked={formData.isDefault}
                   onChange={handleFormChange}
-                  className="h-4 w-4 rounded border-gray-300 text-orange-600 focus:ring-orange-500"
+                  className="h-4 w-4 rounded border-input text-orange-primary focus:ring-orange-primary"
                 />
                 <label
                   htmlFor="isDefault"
-                  className="ml-2 block text-sm text-gray-900"
+                  className="ml-2 block text-sm text-foreground"
                 >
                   Set as default address
                 </label>
@@ -389,14 +389,14 @@ export function AddressSection() {
                 <button
                   type="button"
                   onClick={() => setIsFormOpen(false)}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50"
+                  className="px-4 py-2 text-sm font-medium text-foreground bg-card border border-border rounded-md shadow-sm hover:bg-muted"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="inline-flex justify-center items-center px-4 py-2 text-sm font-medium text-white bg-green-600 border border-transparent rounded-md shadow-sm hover:bg-green-700 disabled:opacity-50"
+                  className="inline-flex justify-center items-center px-4 py-2 text-sm font-medium text-white-500 bg-orange-600 border border-transparent rounded-md shadow-sm hover:bg-orange-accent disabled:opacity-50"
                 >
                   {isSubmitting ? (
                     <Loader2 className="animate-spin mr-2" size={16} />

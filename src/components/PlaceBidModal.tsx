@@ -79,15 +79,15 @@ export default function PlaceBidModal({
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.95, opacity: 0 }}
                 transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                className="bg-white rounded-xl shadow-lg p-6"
+                className="bg-card rounded-xl shadow-lg p-6 border border-border"
               >
-                <Dialog.Title className="text-xl font-semibold text-gray-800 mb-4">
+                <Dialog.Title className="text-xl font-semibold text-card-foreground mb-4">
                   Place a Bid
                 </Dialog.Title>
 
                 <div className="space-y-4">
                   <label className="block">
-                    <span className="text-sm font-medium text-gray-700">
+                    <span className="text-sm font-medium text-foreground">
                       Bid Amount ($)
                     </span>
                     <input
@@ -95,7 +95,7 @@ export default function PlaceBidModal({
                       min="0"
                       value={amount}
                       onChange={(e) => setAmount(e.target.value)}
-                      className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500"
+                      className="mt-1 block w-full px-3 py-2 border border-input rounded-md shadow-sm focus:outline-none focus:ring-orange-primary focus:border-orange-primary bg-background text-foreground"
                       placeholder="Enter your bid amount"
                     />
                   </label>
@@ -104,7 +104,7 @@ export default function PlaceBidModal({
                     <button
                       type="button"
                       onClick={onClose}
-                      className="text-sm px-4 py-2 rounded-md border border-gray-300 hover:bg-gray-50"
+                      className="text-sm px-4 py-2 rounded-md border border-border hover:bg-muted text-foreground"
                       disabled={loading}
                     >
                       Cancel
@@ -112,7 +112,7 @@ export default function PlaceBidModal({
                     <button
                       onClick={handleSubmit}
                       disabled={loading}
-                      className="bg-orange-500 text-white px-4 py-2 text-sm rounded-md hover:bg-orange-600 disabled:opacity-50"
+                      className="bg-orange-primary text-primary-foreground px-4 py-2 text-sm rounded-md hover:bg-orange-accent disabled:opacity-50"
                     >
                       {loading ? "Placing..." : "Place Bid"}
                     </button>

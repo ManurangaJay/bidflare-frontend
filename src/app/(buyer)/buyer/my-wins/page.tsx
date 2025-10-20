@@ -8,12 +8,12 @@ import { authFetch } from "../../../../../lib/authFetch";
 // Reusable Components
 
 const CardSkeleton = () => (
-  <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
-    <div className="aspect-[4/3] w-full animate-pulse bg-gray-200"></div>
+  <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+    <div className="aspect-[4/3] w-full animate-pulse bg-muted"></div>
     <div className="p-4">
-      <div className="h-5 w-3/4 animate-pulse rounded bg-gray-200"></div>
-      <div className="mt-2 h-6 w-1/2 animate-pulse rounded bg-gray-200"></div>
-      <div className="mt-6 h-10 w-full animate-pulse rounded-lg bg-gray-200"></div>
+      <div className="h-5 w-3/4 animate-pulse rounded bg-muted"></div>
+      <div className="mt-2 h-6 w-1/2 animate-pulse rounded bg-muted"></div>
+      <div className="mt-6 h-10 w-full animate-pulse rounded-lg bg-muted"></div>
     </div>
   </div>
 );
@@ -33,7 +33,7 @@ const PaginationControls = ({
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-600 hover:bg-orange-100 disabled:opacity-50"
+        className="rounded-lg border border-border px-3 py-2 text-sm text-muted-foreground hover:bg-orange-secondary/50 disabled:opacity-50"
       >
         Prev
       </button>
@@ -43,8 +43,8 @@ const PaginationControls = ({
           onClick={() => onPageChange(page)}
           className={`rounded-lg border px-4 py-2 text-sm ${
             page === currentPage
-              ? "border-orange-600 bg-orange-600 text-white"
-              : "border-gray-300 text-gray-600 hover:bg-orange-100"
+              ? "border-orange-primary bg-orange-primary text-primary-foreground"
+              : "border-border text-muted-foreground hover:bg-orange-secondary/50"
           }`}
         >
           {page}
@@ -53,7 +53,7 @@ const PaginationControls = ({
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-600 hover:bg-orange-100 disabled:opacity-50"
+        className="rounded-lg border border-border px-3 py-2 text-sm text-muted-foreground hover:bg-orange-secondary/50 disabled:opacity-50"
       >
         Next
       </button>
@@ -214,13 +214,13 @@ export default function MyWinsPage() {
     if (error) {
       return (
         <div className="mt-16 text-center">
-          <h3 className="text-xl font-semibold text-red-600">
+          <h3 className="text-xl font-semibold text-destructive">
             Something went wrong
           </h3>
-          <p className="mt-2 text-gray-500">{error}</p>
+          <p className="mt-2 text-muted-foreground">{error}</p>
           <button
             onClick={fetchWonItems}
-            className="mt-6 rounded-md bg-orange-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-orange-500"
+            className="mt-6 rounded-md bg-orange-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm hover:bg-orange-accent"
           >
             Try Again
           </button>
@@ -236,13 +236,15 @@ export default function MyWinsPage() {
       };
       return (
         <div className="mt-16 text-center">
-          <h3 className="text-xl font-semibold text-gray-800">
+          <h3 className="text-xl font-semibold text-foreground">
             This Tab is Empty
           </h3>
-          <p className="mt-2 text-gray-500">{emptyMessages[activeTab]}</p>
+          <p className="mt-2 text-muted-foreground">
+            {emptyMessages[activeTab]}
+          </p>
           <Link
             href="/buyer/auctions"
-            className="mt-6 inline-block rounded-md bg-orange-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-orange-500"
+            className="mt-6 inline-block rounded-md bg-orange-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm hover:bg-orange-accent"
           >
             Browse Auctions
           </Link>
@@ -275,20 +277,20 @@ export default function MyWinsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-background">
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="text-center">
-          <h1 className="text-2xl font-bold tracking-tight text-orange-600 sm:text-3xl lg:text-4xl">
+          <h1 className="text-2xl font-bold tracking-tight text-orange-primary sm:text-3xl lg:text-4xl">
             🏆 My Wins
           </h1>
-          <p className="mx-auto mt-3 max-w-2xl text-sm text-gray-500 sm:mt-4 sm:text-base">
+          <p className="mx-auto mt-3 max-w-2xl text-sm text-muted-foreground sm:mt-4 sm:text-base">
             Congratulations! Manage your payments and track your deliveries all
             in one place.
           </p>
         </div>
 
         <div className="mt-8 sm:mt-10">
-          <div className="overflow-x-auto border-b border-gray-200 pb-px">
+          <div className="overflow-x-auto border-b border-border pb-px">
             <nav className="-mb-px flex space-x-6" aria-label="Tabs">
               {TABS.map((tab) => (
                 <button
@@ -296,16 +298,16 @@ export default function MyWinsPage() {
                   onClick={() => handleTabClick(tab.status)}
                   className={`whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium transition-colors duration-200 focus:outline-none ${
                     activeTab === tab.status
-                      ? "border-orange-500 text-orange-600"
-                      : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                      ? "border-orange-primary text-orange-primary"
+                      : "border-transparent text-muted-foreground hover:border-border hover:text-foreground"
                   }`}
                 >
                   {tab.name}
                   <span
                     className={`ml-2 hidden rounded-full py-0.5 px-2 text-xs font-semibold sm:inline-block ${
                       activeTab === tab.status
-                        ? "bg-orange-100 text-orange-600"
-                        : "bg-gray-100 text-gray-600"
+                        ? "bg-orange-secondary/50 text-orange-primary dark:bg-orange-primary/20 dark:text-orange-secondary"
+                        : "bg-muted text-muted-foreground"
                     }`}
                   >
                     {isLoading ? "..." : tabCounts[tab.status] ?? 0}

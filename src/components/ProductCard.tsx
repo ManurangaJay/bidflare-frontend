@@ -36,19 +36,19 @@ const ProductCard = ({
   const createdDate = new Date(createdAt);
 
   return (
-    <div className="bg-white rounded-2xl shadow hover:shadow-lg transition overflow-hidden border border-orange-100">
+    <div className="bg-card rounded-2xl shadow-2xl hover:shadow-lg transition overflow-hidden ">
       <div className="relative">
         <img
           src={image || "/images/default.jpg"}
           alt={title}
-          className="w-full h-48 object-contain rounded-t-2xl bg-white"
+          className="w-full h-48 object-contain rounded-t-2xl bg-card"
         />
 
         <span
           className={`absolute top-2 left-2 text-xs font-semibold px-3 py-1 rounded-full ${
             status === "ACTIVE"
-              ? "bg-green-100 text-green-800"
-              : "bg-gray-200 text-gray-600"
+              ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300"
+              : "bg-muted text-muted-foreground"
           }`}
         >
           {status}
@@ -56,20 +56,22 @@ const ProductCard = ({
       </div>
 
       <div className="p-4 space-y-2">
-        <h3 className="text-lg font-semibold text-gray-800 truncate">
+        <h3 className="text-lg font-semibold text-card-foreground truncate">
           {title}
         </h3>
 
-        <p className="text-sm text-gray-500 line-clamp-2">{description}</p>
+        <p className="text-sm text-muted-foreground line-clamp-2">
+          {description}
+        </p>
 
-        <div className="text-sm text-gray-600 flex justify-between items-center">
+        <div className="text-sm text-muted-foreground flex justify-between items-center">
           <span>
             Starting at:{" "}
-            <span className="font-medium text-orange-600">
+            <span className="font-medium text-orange-primary">
               ${safeStartingPrice.toFixed(2)}
             </span>
           </span>
-          <span className="text-xs text-gray-400">
+          <span className="text-xs text-muted-foreground">
             {isValidDate(createdDate)
               ? `Listed ${formatDistanceToNow(createdDate)} ago`
               : "Listing date unavailable"}
@@ -78,7 +80,7 @@ const ProductCard = ({
 
         <Link
           href={`/my-auction/${slugify(title)}`}
-          className="inline-block mt-2 text-orange-600 hover:underline text-sm font-medium"
+          className="inline-block mt-2 text-orange-primary hover:underline text-sm font-medium"
         >
           Manage Auction →
         </Link>

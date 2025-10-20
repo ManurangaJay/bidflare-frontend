@@ -35,8 +35,6 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
-
     // Get theme from localStorage or system preference
     const storedTheme = localStorage.getItem(storageKey) as Theme;
     const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
@@ -46,17 +44,23 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
 
     const initialTheme = storedTheme || systemTheme;
     setThemeState(initialTheme);
-
-    // Apply theme to document
-    document.documentElement.classList.remove("light", "dark");
-    document.documentElement.classList.add(initialTheme);
+    setMounted(true);
   }, [storageKey]);
 
+  // Apply theme to document immediately when theme changes
+  useEffect(() => {
+    document.documentElement.classList.remove("light", "dark");
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [theme]);
+
+  // Save theme to localStorage when it changes
   useEffect(() => {
     if (mounted) {
       localStorage.setItem(storageKey, theme);
-      document.documentElement.classList.remove("light", "dark");
-      document.documentElement.classList.add(theme);
     }
   }, [theme, storageKey, mounted]);
 
@@ -67,11 +71,6 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
   const toggleTheme = () => {
     setThemeState((prev) => (prev === "light" ? "dark" : "light"));
   };
-
-  // Prevent hydration mismatch by not rendering until mounted
-  if (!mounted) {
-    return <>{children}</>;
-  }
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme, setTheme }}>
