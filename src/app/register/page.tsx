@@ -67,20 +67,30 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="max-w-md w-full bg-white p-8 rounded-2xl shadow">
-        <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
-          Create Your BidFlare Account
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-secondary/20 to-orange-primary/10 px-4">
+      <div className="max-w-md w-full bg-card/90 backdrop-blur-sm p-8 rounded-3xl shadow-2xl">
+        <h2 className="text-3xl font-bold text-card-foreground mb-6 text-center">
+          Create Your{" "}
+          <span className="text-orange-500 bg-orange-secondary/30 px-2 py-1 rounded-lg text-4xl font-bold">
+            BidFlare
+          </span>{" "}
+          Account
         </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
-          {error && <p className="text-red-600 text-sm">{error}</p>}
+          {error && (
+            <p className="text-destructive text-sm bg-destructive/10 p-3 rounded-lg">
+              {error}
+            </p>
+          )}
 
           <div>
-            <label className="block text-sm text-gray-600 mb-1">Name</label>
+            <label className="block text-sm font-medium text-foreground mb-2">
+              Name
+            </label>
             <input
               type="text"
               name="name"
-              className="w-full border border-gray-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-orange-500 outline-none"
+              className="w-full border bg-background/50 backdrop-blur-sm rounded-2xl px-4 py-3 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 focus:bg-background/80 outline-none text-foreground transition-all duration-300 shadow-sm"
               value={form.name}
               onChange={handleChange}
               required
@@ -88,11 +98,13 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label className="block text-sm text-gray-600 mb-1">Email</label>
+            <label className="block text-sm font-medium text-foreground mb-2">
+              Email
+            </label>
             <input
               type="email"
               name="email"
-              className="w-full border border-gray-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-orange-500 outline-none"
+              className="w-full border bg-background/50 backdrop-blur-sm rounded-2xl px-4 py-3 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 focus:bg-background/80 outline-none text-foreground transition-all duration-300 shadow-sm"
               value={form.email}
               onChange={handleChange}
               required
@@ -100,12 +112,14 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label className="block text-sm text-gray-600 mb-1">Password</label>
+            <label className="block text-sm font-medium text-foreground mb-2">
+              Password
+            </label>
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
                 name="password"
-                className="w-full border border-gray-300 rounded-xl px-4 py-2 pr-10 focus:ring-2 focus:ring-orange-500 outline-none"
+                className="w-full border border-input rounded-xl px-4 py-2 pr-10 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 outline-none bg-background text-foreground"
                 value={form.password}
                 onChange={handleChange}
                 required
@@ -113,7 +127,7 @@ export default function RegisterPage() {
               <button
                 type="button"
                 onClick={() => setShowPassword((prev) => !prev)}
-                className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600"
+                className="absolute inset-y-0 right-0 flex items-center pr-3 text-muted-foreground hover:text-foreground"
                 aria-label={showPassword ? "Hide password" : "Show password"}
               >
                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
@@ -122,18 +136,19 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label className="block text-sm text-gray-600 mb-2">
+            <label className="block text-sm text-muted-foreground mb-2">
               What will you be doing on BidFlare?
             </label>
             <div className="grid grid-cols-2 gap-3">
               <button
                 type="button"
                 onClick={() => handleRoleChange("BUYER")}
-                className={`border rounded-xl p-4 text-center transition ${
+                className={`rounded-2xl p-4 text-center shadow-sm border border-input ${
                   form.role === "BUYER"
-                    ? "bg-orange-100 border-orange-500 text-orange-800"
-                    : "bg-white border-gray-300 text-gray-700 hover:bg-gray-50"
+                    ? "bg-orange-600 text-primary-foreground shadow-lg scale-105 text-white"
+                    : "bg-card/50 backdrop-blur-sm text-card-foreground hover:bg-orange-secondary/20 hover:shadow-md"
                 }`}
+                style={{ transition: "all 0.5s ease-in-out" }}
               >
                 <div className="font-medium">I'm here to Bid</div>
                 <div className="text-sm">Participate in auctions</div>
@@ -142,11 +157,12 @@ export default function RegisterPage() {
               <button
                 type="button"
                 onClick={() => handleRoleChange("SELLER")}
-                className={`border rounded-xl p-4 text-center transition ${
+                className={`border rounded-2xl p-4 text-center shadow-sm ${
                   form.role === "SELLER"
-                    ? "bg-orange-100 border-orange-500 text-orange-800"
-                    : "bg-white border-gray-300 text-gray-700 hover:bg-gray-50"
+                    ? "bg-orange-600 text-primary-foreground shadow-lg scale-105 text-white"
+                    : "bg-card/50 backdrop-blur-sm text-card-foreground hover:bg-orange-secondary/20 hover:shadow-md"
                 }`}
+                style={{ transition: "all 0.5s ease-in-out" }}
               >
                 <div className="font-medium">I'm here to Sell</div>
                 <div className="text-sm">Create and manage auctions</div>
@@ -156,15 +172,19 @@ export default function RegisterPage() {
 
           <button
             type="submit"
-            className="w-full bg-orange-600 text-white py-2 rounded-xl hover:bg-orange-700 transition"
+            className="w-full bg-gradient-to-r from-orange-400 to-orange-600 dark:from-orange-400 dark:to-orange-700 text-white py-3 rounded-2xl   hover:scale-y-105 shadow-lg hover:shadow-xl font-semibold"
+            style={{ transition: "all 0.3s ease-in-out" }}
           >
             Register
           </button>
         </form>
 
-        <p className="text-sm text-center text-gray-500 mt-4">
+        <p className="text-sm text-center text-muted-foreground mt-6">
           Already have an account?{" "}
-          <a href="/signin" className="text-orange-600 hover:underline">
+          <a
+            href="/signin"
+            className="text-orange-primary hover:text-orange-accent font-semibold transition-colors duration-300 hover:text-orange-500"
+          >
             Sign In
           </a>
         </p>

@@ -50,29 +50,40 @@ export default function SignInPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-orange-50 px-4">
-      <div className="max-w-md w-full bg-white p-8 rounded-2xl shadow">
-        <h2 className="text-2xl font-bold text-orange-700 mb-6 text-center">
-          Sign In to BidFlare
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-secondary/30 to-orange-primary/20 px-4">
+      <div className="max-w-md w-full bg-card/90 backdrop-blur-sm p-8 rounded-3xl shadow-2xl">
+        <h2 className="text-3xl font-bold text-card-foreground mb-6 text-center">
+          Sign In to{" "}
+          <span className="text-orange-500 bg-orange-secondary/30 px-2 py-1 rounded-lg text-4xl font-bold">
+            BidFlare
+          </span>
         </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
-          {error && <p className="text-red-600 text-sm">{error}</p>}
+          {error && (
+            <p className="text-destructive text-sm bg-destructive/10 p-3 rounded-lg">
+              {error}
+            </p>
+          )}
           <div>
-            <label className="block text-sm text-gray-600 mb-1">Email</label>
+            <label className="block text-sm font-medium text-foreground mb-2">
+              Email
+            </label>
             <input
               type="email"
-              className="w-full border border-gray-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-orange-500 outline-none"
+              className="w-full border border-input rounded-xl px-4 py-3 pr-10 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 outline-none bg-background text-foreground"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>
           <div>
-            <label className="block text-sm text-gray-600 mb-1">Password</label>
+            <label className="block text-sm font-medium text-foreground mb-2">
+              Password
+            </label>
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
-                className="w-full border border-gray-300 rounded-xl px-4 py-2 pr-10 focus:ring-2 focus:ring-orange-500 outline-none"
+                className="w-full border border-input rounded-xl px-4 py-3 pr-10 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 outline-none bg-background text-foreground"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
@@ -80,7 +91,7 @@ export default function SignInPage() {
               <button
                 type="button"
                 onClick={() => setShowPassword((prev) => !prev)}
-                className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600"
+                className="absolute inset-y-0 right-0 flex items-center pr-3 text-muted-foreground hover:text-foreground"
                 aria-label={showPassword ? "Hide password" : "Show password"}
               >
                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
@@ -89,14 +100,18 @@ export default function SignInPage() {
           </div>
           <button
             type="submit"
-            className="w-full bg-orange-500 text-white py-2 rounded-xl hover:bg-orange-600 transition"
+            className="w-full bg-gradient-to-r from-orange-400 to-orange-600 dark:from-orange-400 dark:to-orange-700 text-white py-3 rounded-2xl hover:scale-y-105 shadow-lg hover:shadow-xl font-semibold"
+            style={{ transition: "all 0.3s ease-in-out" }}
           >
             Sign In
           </button>
         </form>
-        <p className="text-sm text-center text-gray-500 mt-4">
+        <p className="text-sm text-center text-muted-foreground mt-6">
           Don&apos;t have an account?{" "}
-          <a href="/register" className="text-orange-600 hover:underline">
+          <a
+            href="/register"
+            className="text-orange-primary hover:text-orange-accent font-semibold transition-colors duration-300 hover:text-orange-500"
+          >
             Register
           </a>
         </p>
