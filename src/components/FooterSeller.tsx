@@ -87,7 +87,23 @@ const FooterSeller = () => {
         </div>
       </div>
       <div className="mt-10 text-center text-sm text-muted-foreground">
-        &copy; {new Date().getFullYear()} BidFlare. All rights reserved.
+        <div className="flex flex-col sm:flex-row justify-center items-center gap-2 sm:gap-4">
+          <p>
+            &copy; {new Date().getFullYear()} BidFlare. All rights reserved.
+          </p>
+          <span className="hidden sm:inline">•</span>
+          <p>
+            Developed by{" "}
+            <a
+              href="https://manuranga-jayawardhana-portfolio.netlify.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-orange-500 hover:text-orange-600 transition-colors font-medium"
+            >
+              Manuranga Jayawardhana
+            </a>
+          </p>
+        </div>
       </div>
     </footer>
   );

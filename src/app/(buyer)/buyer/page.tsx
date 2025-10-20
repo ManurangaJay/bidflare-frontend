@@ -95,7 +95,7 @@ export default function BuyerHomepage() {
         </p>
         <button
           onClick={handleStartBidding}
-          className="bg-orange-600 text-primary-foreground px-6 py-3 rounded-xl shadow hover:bg-orange-accent transition-colors"
+          className="bg-orange-600 text-primary-foreground px-6 py-3 rounded-xl shadow hover:bg-orange-accent transition-colors text-white"
         >
           Start Bidding
         </button>

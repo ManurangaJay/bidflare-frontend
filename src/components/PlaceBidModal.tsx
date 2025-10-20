@@ -71,7 +71,10 @@ export default function PlaceBidModal({
     <AnimatePresence>
       {isOpen && (
         <Dialog open={isOpen} onClose={onClose} className="relative z-50">
-          <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+          <div
+            className="fixed inset-0 bg-black/60 dark:bg-black/70 backdrop-blur-lg transition-all"
+            aria-hidden="true"
+          />
           <div className="fixed inset-0 flex items-center justify-center p-4">
             <Dialog.Panel className="w-full max-w-md">
               <motion.div
@@ -79,15 +82,15 @@ export default function PlaceBidModal({
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.95, opacity: 0 }}
                 transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                className="bg-card rounded-xl shadow-lg p-6 border border-border"
+                className="bg-card/90 backdrop-blur-sm rounded-2xl shadow-2xl p-6 border border-border"
               >
-                <Dialog.Title className="text-xl font-semibold text-card-foreground mb-4">
+                <Dialog.Title className="text-xl font-semibold text-card-foreground mb-4 text-white">
                   Place a Bid
                 </Dialog.Title>
 
                 <div className="space-y-4">
                   <label className="block">
-                    <span className="text-sm font-medium text-foreground">
+                    <span className="text-sm font-medium text-card-foreground text-white">
                       Bid Amount ($)
                     </span>
                     <input
@@ -95,7 +98,8 @@ export default function PlaceBidModal({
                       min="0"
                       value={amount}
                       onChange={(e) => setAmount(e.target.value)}
-                      className="mt-1 block w-full px-3 py-2 border border-input rounded-md shadow-sm focus:outline-none focus:ring-orange-primary focus:border-orange-primary bg-background text-foreground"
+                      className="mt-1 block w-full rounded-2xl px-4 py-3 shadow-sm focus:ring-1 focus:ring-orange-500 focus:border-orange-500 focus:bg-background/80 outline-none text-foreground backdrop-blur-sm"
+                      style={{ backgroundColor: "var(--muted)" }}
                       placeholder="Enter your bid amount"
                     />
                   </label>
@@ -104,7 +108,7 @@ export default function PlaceBidModal({
                     <button
                       type="button"
                       onClick={onClose}
-                      className="text-sm px-4 py-2 rounded-md border border-border hover:bg-muted text-foreground"
+                      className="text-sm border px-4 py-2 rounded-2xl bg-card text-card-foreground hover:bg-muted focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
                       disabled={loading}
                     >
                       Cancel
@@ -112,7 +116,7 @@ export default function PlaceBidModal({
                     <button
                       onClick={handleSubmit}
                       disabled={loading}
-                      className="bg-orange-primary text-primary-foreground px-4 py-2 text-sm rounded-md hover:bg-orange-accent disabled:opacity-50"
+                      className="px-4 py-2 text-sm rounded-2xl bg-gradient-to-r from-orange-400 to-orange-600 dark:from-orange-400 dark:to-orange-700 text-white shadow-lg hover:scale-y-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 disabled:opacity-50"
                     >
                       {loading ? "Placing..." : "Place Bid"}
                     </button>

@@ -244,7 +244,7 @@ export default function MyWinsPage() {
           </p>
           <Link
             href="/buyer/auctions"
-            className="mt-6 inline-block rounded-md bg-orange-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm hover:bg-orange-accent"
+            className="mt-6 inline-block rounded-md bg-orange-600 px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm hover:bg-orange-accent text-white"
           >
             Browse Auctions
           </Link>

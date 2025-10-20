@@ -142,34 +142,38 @@ export default function AuctionDetailPage() {
   }, [auction]);
 
   if (!auction || !product) {
-    return <div className="text-center py-10">Loading auction...</div>;
+    return (
+      <div className="text-center py-10 text-foreground">
+        Loading auction...
+      </div>
+    );
   }
 
   return (
-    <div className="min-h-screen bg-white text-gray-800 px-4 py-6 max-w-4xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-orange-secondary/20 to-orange-primary/10 text-foreground px-4 py-6 max-w-4xl mx-auto">
       <div className="space-y-6">
         {/* Title */}
-        <h1 className="text-3xl font-bold text-orange-600">{product.title}</h1>
+        <h1 className="text-3xl font-bold text-orange-500">{product.title}</h1>
         {/* Product Image + Info */}
         <div className="grid md:grid-cols-2 gap-6 items-start">
           {/* Image */}
           <img
             src={imageUrl}
             alt={product.title}
-            className="w-full h-auto rounded-lg shadow"
+            className="w-full h-auto rounded-2xl shadow-2xl"
           />
 
           {/* Info */}
           <div className="space-y-4">
-            <p className="text-gray-700 text-base leading-relaxed">
+            <p className="text-card-foreground text-base leading-relaxed">
               {product.description}
             </p>
 
-            <div className="flex items-center gap-2 text-sm">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <TagIcon className="w-5 h-5 text-orange-500" />
               <span>
                 Starting Price:{" "}
-                <span className="font-semibold text-orange-600">
+                <span className="font-semibold text-orange-500">
                   ${product.startingPrice.toFixed(2)}
                 </span>
               </span>
@@ -177,35 +181,35 @@ export default function AuctionDetailPage() {
             {!auction.isClosed && (
               <div className="mt-2">
                 {/* Label above */}
-                <p className="text-orange-600 font-semibold text-sm mb-1 flex items-center gap-1 pb-2">
+                <p className="text-orange-500 font-semibold text-sm mb-1 flex items-center gap-1 pb-2">
                   <ClockIcon className="w-5 h-5" />
                   Time Remaining:
                 </p>
                 {/* Timer pills */}
                 <div className="flex gap-2">
                   {/* Days */}
-                  <div className="bg-orange-100 text-orange-700 rounded-full px-3 py-1 flex flex-col items-center min-w-[50px]">
+                  <div className="bg-orange-secondary/50 dark:bg-orange-primary/20 text-orange-700 dark:text-orange-300 rounded-full px-3 py-1 flex flex-col items-center min-w-[50px]">
                     <span className="font-bold text-lg leading-none">
                       {days}
                     </span>
                     <span className="text-xs">Days</span>
                   </div>
                   {/* Hours */}
-                  <div className="bg-orange-100 text-orange-700 rounded-full px-3 py-1 flex flex-col items-center min-w-[50px]">
+                  <div className="bg-orange-secondary/50 dark:bg-orange-primary/20 text-orange-700 dark:text-orange-300 rounded-full px-3 py-1 flex flex-col items-center min-w-[50px]">
                     <span className="font-bold text-lg leading-none">
                       {hours.toString().padStart(2, "0")}
                     </span>
                     <span className="text-xs">Hours</span>
                   </div>
                   {/* Minutes */}
-                  <div className="bg-orange-100 text-orange-700 rounded-full px-3 py-1 flex flex-col items-center min-w-[50px]">
+                  <div className="bg-orange-secondary/50 dark:bg-orange-primary/20 text-orange-700 dark:text-orange-300 rounded-full px-3 py-1 flex flex-col items-center min-w-[50px]">
                     <span className="font-bold text-lg leading-none">
                       {minutes.toString().padStart(2, "0")}
                     </span>
                     <span className="text-xs">Minutes</span>
                   </div>
                   {/* Seconds */}
-                  <div className="bg-orange-100 text-orange-700 rounded-full px-3 py-1 flex flex-col items-center min-w-[50px]">
+                  <div className="bg-orange-secondary/50 dark:bg-orange-primary/20 text-orange-700 dark:text-orange-300 rounded-full px-3 py-1 flex flex-col items-center min-w-[50px]">
                     <span className="font-bold text-lg leading-none">
                       {seconds.toString().padStart(2, "0")}
                     </span>
@@ -220,33 +224,33 @@ export default function AuctionDetailPage() {
         {!auction.isClosed && (
           <div className="flex flex-col sm:flex-row gap-4 mt-6">
             <button
-              className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-lg shadow"
+              className="bg-gradient-to-r from-orange-400 to-orange-600 dark:from-orange-400 dark:to-orange-700 text-white px-6 py-3 rounded-2xl shadow-lg hover:scale-y-105 hover:shadow-xl font-semibold"
               onClick={() => setBidModalOpen(true)}
             >
               Place a Bid
             </button>
 
-            <button className="border border-orange-500 text-orange-600 px-6 py-2 rounded-lg hover:bg-orange-50">
+            <button className="bg-card/90 backdrop-blur-sm text-orange-500 px-6 py-3 rounded-2xl hover:bg-muted border border-orange-500/30 shadow-lg hover:shadow-xl">
               Ask a Question
             </button>
           </div>
         )}
         {/* Auction Status Panel */}
-        <div className="mt-6 p-4 rounded-lg bg-orange-50 border border-orange-200">
-          <p className="text-sm text-gray-600">
+        <div className="mt-6 p-4 rounded-2xl bg-card/90 backdrop-blur-sm shadow-2xl border border-orange-500/30">
+          <p className="text-sm text-muted-foreground">
             Auction Status:{" "}
             <span
               className={`font-semibold ${
-                auction.isClosed ? "text-red-500" : "text-green-600"
+                auction.isClosed ? "text-red-500" : "text-green-500"
               }`}
             >
               {auction.isClosed ? "Closed" : "Ongoing"}
             </span>
           </p>
           {auction.isClosed && auction.winnerId && (
-            <p className="text-sm text-gray-600 mt-1">
+            <p className="text-sm text-muted-foreground mt-1">
               Winner:{" "}
-              <span className="font-semibold text-gray-800">
+              <span className="font-semibold text-card-foreground">
                 {auction.winnerId}
               </span>
             </p>

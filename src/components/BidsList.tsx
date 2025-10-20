@@ -48,9 +48,9 @@ export default function BidsList({
             >
               <div className="flex justify-between mb-1">
                 <span
-                  className={`font-medium ${
+                  className={`font-semibold ${
                     isUserBid
-                      ? "text-blue-700 dark:text-blue-300"
+                      ? "text-blue-100 dark:text-blue-500"
                       : "text-card-foreground"
                   }`}
                 >
@@ -64,7 +64,7 @@ export default function BidsList({
               <div className="w-full bg-muted rounded-full h-2">
                 <div
                   className={`h-2 rounded-full transition-all ${
-                    isUserBid ? "bg-blue-500" : "bg-orange-primary"
+                    isUserBid ? "bg-blue-500" : "bg-orange-500"
                   }`}
                   style={{ width: `${widthPercent}%` }}
                 />
