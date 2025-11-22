@@ -59,18 +59,18 @@ export default function WonItemCard({
     statusStyles[status] || "bg-gray-100 text-gray-800 ring-gray-600/20";
 
   return (
-    <div className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-all duration-300 ease-in-out hover:shadow-xl hover:-translate-y-1">
+    <div className="group flex h-full flex-col overflow-hidden rounded-2xl bg-card shadow-xl transition-all duration-300 ease-in-out hover:shadow-md  dark: hover:shadow-gray-800 hover:-translate-y-1">
       <div className="relative overflow-hidden">
         <img
           src={image}
           alt={title}
           className="w-full h-48 object-contain rounded-t-2xl bg-card transition-transform duration-300 group-hover:scale-105"
         />
-        <span
+        {/* <span
           className={`absolute top-3 right-3 inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ring-1 ring-inset ${statusStyle}`}
         >
           {status}
-        </span>
+        </span> */}
       </div>
 
       <div className="flex flex-1 flex-col p-4">
@@ -82,16 +82,15 @@ export default function WonItemCard({
         </p>
 
         <div className="mt-4 flex-1 flex items-end">
-          {status === "SOLD" ||
-            (status === "PAID" && (
-              <button
-                onClick={onPay}
-                disabled={isUpdating}
-                className="flex w-full items-center justify-center rounded-lg bg-green-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:bg-muted"
-              >
-                {isUpdating ? <SpinnerIcon /> : "Pay Now"}
-              </button>
-            ))}
+          {status === "SOLD" && (
+            <button
+              onClick={onPay}
+              disabled={isUpdating}
+              className="flex w-full items-center justify-center rounded-lg bg-green-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:bg-muted"
+            >
+              {isUpdating ? <SpinnerIcon /> : "Pay Now"}
+            </button>
+          )}
           {status === "SHIPPED" && (
             <button
               onClick={onMarkDelivered}

@@ -3,9 +3,11 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
 import WonItemCard from "@/components/WonItemCard";
 import Link from "next/link";
-import { authFetch } from "../../../../../lib/authFetch";
+import { authFetch } from "../../../../../lib/authFetch"; // Adjust this path if needed
+import PaymentModal from "@/components/payment/PaymentModal"; // Ensure this path matches where you created the modal
+import { useSearchParams } from "next/navigation";
 
-// Reusable Components
+// --- Reusable Components ---
 
 const CardSkeleton = () => (
   <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
@@ -61,7 +63,7 @@ const PaginationControls = ({
   );
 };
 
-// Type Definitions
+// --- Type Definitions ---
 type ItemStatus = "SOLD" | "PAID" | "SHIPPED" | "DELIVERED";
 type WonAuction = { id: string; productId: string; lastPrice: number };
 type Product = { id: string; title: string; status: ItemStatus };
@@ -81,13 +83,23 @@ const TABS: { name: string; status: ItemStatus }[] = [
 ];
 
 export default function MyWinsPage() {
+  // --- State ---
   const [items, setItems] = useState<WonItemWithProduct[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [updatingItemId, setUpdatingItemId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<ItemStatus>("SOLD");
+  const searchParams = new useSearchParams();
 
+  // State to track which item is selected for payment
+  const [itemToPay, setItemToPay] = useState<{
+    auctionId: string;
+    title: string;
+    price: number;
+  } | null>(null);
+
+  // --- Data Fetching ---
   const fetchWonItems = useCallback(async () => {
     setIsLoading(true);
     setError(null);
@@ -96,6 +108,7 @@ export default function MyWinsPage() {
       if (!res.ok)
         throw new Error("Failed to load your won auctions. Please try again.");
       const auctionsData: WonAuction[] = await res.json();
+
       const enrichedItems = await Promise.all(
         auctionsData.map(async (auction) => {
           try {
@@ -104,6 +117,7 @@ export default function MyWinsPage() {
             );
             if (!productRes.ok) return null;
             const product: Product = await productRes.json();
+
             let image = "https://placehold.co/600x400/EEE/31343C?text=No+Image";
             try {
               const imageRes = await authFetch(`/product-images/${product.id}`);
@@ -119,6 +133,7 @@ export default function MyWinsPage() {
                 }
               }
             } catch {}
+
             return {
               ...product,
               auctionId: auction.id,
@@ -139,11 +154,18 @@ export default function MyWinsPage() {
   }, []);
 
   useEffect(() => {
-    fetchWonItems();
+    if (searchParams.get("redirect_status") === "succeeded") {
+      alert("Payment Successful! Your item status will update shortly.");
+      fetchWonItems();
+    }
   }, [fetchWonItems]);
 
-  const handlePayment = (productId: string) =>
-    alert("Payment portal integration is pending.");
+  // --- Handlers ---
+
+  // Opens the Payment Modal
+  const handlePayment = (auctionId: string, title: string, price: number) => {
+    setItemToPay({ auctionId, title, price });
+  };
 
   const handleMarkDelivered = async (productId: string) => {
     setUpdatingItemId(productId);
@@ -167,27 +189,6 @@ export default function MyWinsPage() {
     }
   };
 
-  // Filtering and Pagination Logic
-  const filteredItems = useMemo(
-    () => items.filter((item) => item.status === activeTab),
-    [items, activeTab]
-  );
-  const tabCounts = useMemo(
-    () =>
-      TABS.reduce(
-        (acc, tab) => ({
-          ...acc,
-          [tab.status]: items.filter((i) => i.status === tab.status).length,
-        }),
-        {} as Record<ItemStatus, number>
-      ),
-    [items]
-  );
-  const totalPages = Math.ceil(filteredItems.length / ITEMS_PER_PAGE);
-  const currentItems = filteredItems.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
-  );
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
@@ -200,7 +201,31 @@ export default function MyWinsPage() {
     setCurrentPage(1);
   };
 
-  // Conditional Rendering Logic
+  // --- Derived State (Filtering & Pagination) ---
+  const filteredItems = useMemo(
+    () => items.filter((item) => item.status === activeTab),
+    [items, activeTab]
+  );
+
+  const tabCounts = useMemo(
+    () =>
+      TABS.reduce(
+        (acc, tab) => ({
+          ...acc,
+          [tab.status]: items.filter((i) => i.status === tab.status).length,
+        }),
+        {} as Record<ItemStatus, number>
+      ),
+    [items]
+  );
+
+  const totalPages = Math.ceil(filteredItems.length / ITEMS_PER_PAGE);
+  const currentItems = filteredItems.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
+
+  // --- Rendering Helpers ---
   const renderContent = () => {
     if (isLoading) {
       return (
@@ -262,7 +287,10 @@ export default function MyWinsPage() {
               price={item.price}
               status={item.status}
               isUpdating={updatingItemId === item.id}
-              onPay={() => handlePayment(item.id)}
+              // Pass the auctionId (for backend) and display details to the handler
+              onPay={() =>
+                handlePayment(item.auctionId, item.title, item.price)
+              }
               onMarkDelivered={() => handleMarkDelivered(item.id)}
             />
           ))}
@@ -276,6 +304,7 @@ export default function MyWinsPage() {
     );
   };
 
+  // --- Main Render ---
   return (
     <div className="min-h-screen bg-background">
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
@@ -289,6 +318,7 @@ export default function MyWinsPage() {
           </p>
         </div>
 
+        {/* Tabs */}
         <div className="mt-8 sm:mt-10">
           <div className="overflow-x-auto border-b border-border pb-px">
             <nav className="-mb-px flex space-x-6" aria-label="Tabs">
@@ -318,8 +348,20 @@ export default function MyWinsPage() {
           </div>
         </div>
 
+        {/* Content Area */}
         <div className="mt-8">{renderContent()}</div>
       </div>
+
+      {/* Payment Modal */}
+      {itemToPay && (
+        <PaymentModal
+          isOpen={!!itemToPay}
+          onClose={() => setItemToPay(null)}
+          auctionId={itemToPay.auctionId}
+          itemTitle={itemToPay.title}
+          price={itemToPay.price}
+        />
+      )}
     </div>
   );
 }

@@ -108,7 +108,7 @@ export default function AuctionDetailPage() {
   useEffect(() => {
     if (!auction || !auction.endTime) return;
 
-    const end = new Date(auction.endTime + "Z").getTime();
+    const end = new Date(auction.endTime).getTime();
 
     if (isNaN(end)) {
       console.error(
