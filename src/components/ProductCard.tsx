@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
+import { Loader2 } from "lucide-react";
 
 type ProductCardProps = {
   id: string;
@@ -9,6 +10,8 @@ type ProductCardProps = {
   startingPrice?: number | null;
   status: string;
   createdAt: string;
+  isUpdating?: boolean;
+  onMarkAsShipped?: () => void;
 };
 
 const isValidDate = (date: Date) => !isNaN(date.getTime());
@@ -29,6 +32,8 @@ const ProductCard = ({
   startingPrice,
   status,
   createdAt,
+  isUpdating = false,
+  onMarkAsShipped,
 }: ProductCardProps) => {
   const safeStartingPrice =
     typeof startingPrice === "number" ? startingPrice : 0;
@@ -78,12 +83,29 @@ const ProductCard = ({
           </span>
         </div>
 
-        <Link
-          href={`/my-auction/${slugify(title)}`}
-          className="inline-block mt-2 text-orange-primary hover:underline text-sm font-medium"
-        >
-          Manage Auction →
-        </Link>
+        <div className="pt-2">
+          {status === "PAID" && onMarkAsShipped && (
+            <button
+              onClick={onMarkAsShipped}
+              disabled={isUpdating}
+              className="w-full flex items-center justify-center rounded-lg bg-orange-500 px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition-colors hover:bg-orange-600 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {isUpdating ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : null}
+              {isUpdating ? "Updating..." : "Mark As Shipped"}
+            </button>
+          )}
+
+          {status === "ACTIVE" && (
+            <Link
+              href={`/my-auction/${slugify(title)}`}
+              className="inline-block text-orange-primary hover:underline text-sm font-medium"
+            >
+              Manage Auction →
+            </Link>
+          )}
+        </div>
       </div>
     </div>
   );

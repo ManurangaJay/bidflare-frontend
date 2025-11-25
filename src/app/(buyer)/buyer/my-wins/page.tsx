@@ -188,19 +188,24 @@ export default function MyWinsPage() {
   const handleMarkDelivered = async (productId: string) => {
     setUpdatingItemId(productId);
     const originalItems = [...items];
+
+    // Optimistic UI update
     const newItems = items.map((item) =>
       item.id === productId ? { ...item, status: "DELIVERED" as const } : item
     );
     setItems(newItems);
+
     try {
-      const res = await authFetch(`/products/${productId}/status`, {
+      const res = await authFetch(`/products/${productId}/deliver`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: "DELIVERED" }),
       });
-      if (!res.ok) throw new Error("Server failed to update status.");
-    } catch (err) {
-      alert("Could not mark item as delivered. Reverting change.");
+      if (!res.ok) throw new Error("Failed to confirm delivery.");
+
+      toast.success("Enjoy your new item! Delivery confirmed.");
+    } catch (err: any) {
+      toast.error(
+        err.message || "Could not confirm delivery. Please try again."
+      );
       setItems(originalItems);
     } finally {
       setUpdatingItemId(null);
@@ -305,7 +310,6 @@ export default function MyWinsPage() {
               price={item.price}
               status={item.status}
               isUpdating={updatingItemId === item.id}
-              // Pass the auctionId (for backend) and display details to the handler
               onPay={() =>
                 handlePayment(item.auctionId, item.title, item.price)
               }

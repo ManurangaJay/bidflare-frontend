@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import ProductCard from "@/components/ProductCard";
 import { Loader2 } from "lucide-react";
 import { authFetch } from "../../../../../lib/authFetch";
 import RoleGuard from "@/components/RoleGuard";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 type Product = {
   id: string;
@@ -18,10 +19,25 @@ type Product = {
   endsAt: string;
 };
 
+type ProductStatus = "SOLD" | "PAID" | "SHIPPED" | "DELIVERED" | "ACTIVE";
+type TabStatus = ProductStatus | "ALL";
+
+const TABS: { name: string; status: TabStatus }[] = [
+  { name: "All", status: "ALL" },
+  { name: "To get paid", status: "SOLD" },
+  { name: "To Ship", status: "PAID" },
+  { name: "Delivering", status: "SHIPPED" },
+  { name: "Completed", status: "DELIVERED" },
+];
+
 export default function SellerProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<TabStatus>("ALL");
+  const [updatingProductId, setUpdatingProductId] = useState<string | null>(
+    null
+  );
   const router = useRouter();
 
   useEffect(() => {
@@ -65,6 +81,60 @@ export default function SellerProductsPage() {
     fetchSellerProducts();
   }, []);
 
+  const handleTabClick = (status: TabStatus) => {
+    setActiveTab(status);
+  };
+
+  const handleMarkAsShipped = async (productId: string) => {
+    setUpdatingProductId(productId);
+    const originalProducts = [...products];
+
+    // Optimistic update
+    const newProducts = products.map((p) =>
+      p.id === productId ? { ...p, status: "SHIPPED" } : p
+    );
+    setProducts(newProducts);
+
+    try {
+      const res = await authFetch(`/products/${productId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: "SHIPPED" }),
+      });
+      if (!res.ok) throw new Error("Failed to update product status.");
+    } catch (err: any) {
+      toast.error(
+        err.message || "Could not mark as shipped. Reverting change."
+      );
+      setProducts(originalProducts); // Revert on failure
+    } finally {
+      setUpdatingProductId(null);
+    }
+  };
+
+  const filteredProducts = useMemo(
+    () =>
+      activeTab === "ALL"
+        ? products
+        : products.filter((product) => product.status === activeTab),
+    [products, activeTab]
+  );
+
+  const tabCounts = useMemo(
+    () =>
+      TABS.reduce((acc, tab) => {
+        if (tab.status === "ALL") {
+          acc[tab.status] = products.length;
+        } else {
+          acc[tab.status] = products.filter(
+            (p) => p.status === tab.status
+          ).length;
+        }
+        return acc;
+      }, {} as Record<TabStatus, number>),
+    [products]
+  );
+
   if (loading) {
     return (
       <RoleGuard allowedRoles={["SELLER"]}>
@@ -88,7 +158,7 @@ export default function SellerProductsPage() {
     );
   }
 
-  if (products.length === 0) {
+  if (products.length === 0 && !loading) {
     return (
       <RoleGuard allowedRoles={["SELLER"]}>
         <div className="text-center text-gray-500 pt-20 text-lg">
@@ -110,10 +180,63 @@ export default function SellerProductsPage() {
         <h1 className="text-2xl font-bold text-orange-primary mb-6">
           Your Products
         </h1>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {products.map((product) => (
-            <ProductCard key={product.id} {...product} />
-          ))}
+
+        {/* Tabs */}
+        <div className="mt-8 sm:mt-10">
+          <div className="overflow-x-auto border-b border-border pb-px">
+            <nav className="-mb-px flex space-x-6" aria-label="Tabs">
+              {TABS.map((tab) => (
+                <button
+                  key={tab.name}
+                  onClick={() => handleTabClick(tab.status)}
+                  className={`whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium transition-colors duration-200 focus:outline-none ${
+                    activeTab === tab.status
+                      ? "border-orange-primary text-orange-primary"
+                      : "border-transparent text-muted-foreground hover:border-border hover:text-foreground"
+                  }`}
+                >
+                  {tab.name}
+                  <span
+                    className={`ml-2 hidden rounded-full py-0.5 px-2 text-xs font-semibold sm:inline-block ${
+                      activeTab === tab.status
+                        ? "bg-orange-secondary/50 text-orange-primary dark:bg-orange-primary/20 dark:text-orange-secondary"
+                        : "bg-muted text-muted-foreground"
+                    }`}
+                  >
+                    {loading ? "..." : tabCounts[tab.status] ?? 0}
+                  </span>
+                </button>
+              ))}
+            </nav>
+          </div>
+        </div>
+
+        {/* Content Area */}
+        <div className="mt-8">
+          {filteredProducts.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredProducts.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  {...product}
+                  isUpdating={updatingProductId === product.id}
+                  onMarkAsShipped={() => handleMarkAsShipped(product.id)}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center text-gray-500 pt-10 text-lg">
+              <p>No products found in this category.</p>
+              {activeTab !== "ALL" && (
+                <button
+                  onClick={() => setActiveTab("ALL")}
+                  className="mt-4 text-orange-500 hover:underline"
+                >
+                  View All Products
+                </button>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </RoleGuard>
