@@ -3,11 +3,10 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
 import WonItemCard from "@/components/WonItemCard";
 import Link from "next/link";
-import { authFetch } from "../../../../../lib/authFetch"; // Adjust this path if needed
-import PaymentModal from "@/components/payment/PaymentModal"; // Ensure this path matches where you created the modal
+import { authFetch } from "../../../../../lib/authFetch";
+import PaymentModal from "@/components/payment/PaymentModal";
 import { useSearchParams } from "next/navigation";
-
-// --- Reusable Components ---
+import { toast } from "sonner";
 
 const CardSkeleton = () => (
   <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
@@ -90,7 +89,7 @@ export default function MyWinsPage() {
   const [error, setError] = useState<string | null>(null);
   const [updatingItemId, setUpdatingItemId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<ItemStatus>("SOLD");
-  const searchParams = new useSearchParams();
+  const searchParams = useSearchParams();
 
   // State to track which item is selected for payment
   const [itemToPay, setItemToPay] = useState<{
@@ -115,7 +114,12 @@ export default function MyWinsPage() {
             const productRes = await authFetch(
               `/products/${auction.productId}`
             );
-            if (!productRes.ok) return null;
+            if (!productRes.ok) {
+              console.error(
+                `Debug: Failed to fetch product ${auction.productId}`
+              );
+              return null;
+            }
             const product: Product = await productRes.json();
 
             let image = "https://placehold.co/600x400/EEE/31343C?text=No+Image";
@@ -145,20 +149,34 @@ export default function MyWinsPage() {
           }
         })
       );
-      setItems(enrichedItems.filter(Boolean) as WonItemWithProduct[]);
+      const finalItems = enrichedItems.filter(Boolean) as WonItemWithProduct[];
+      console.log("Debug: Enriched items ready for display:", finalItems);
+      setItems(finalItems);
     } catch (err: any) {
+      console.error("Debug: Error in fetchWonItems:", err);
       setError(err.message);
     } finally {
       setIsLoading(false);
     }
   }, []);
 
+  // --- Effects ---
   useEffect(() => {
-    if (searchParams.get("redirect_status") === "succeeded") {
-      alert("Payment Successful! Your item status will update shortly.");
-      fetchWonItems();
-    }
+    fetchWonItems();
   }, [fetchWonItems]);
+
+  useEffect(() => {
+    const redirectStatus = searchParams.get("redirect_status");
+
+    if (redirectStatus === "succeeded") {
+      toast.success(
+        "Payment Successful! Your item status will update shortly."
+      );
+      fetchWonItems();
+    } else if (redirectStatus) {
+      toast.error("Payment failed or was canceled. Please try again.");
+    }
+  }, [searchParams, fetchWonItems]);
 
   // --- Handlers ---
 
