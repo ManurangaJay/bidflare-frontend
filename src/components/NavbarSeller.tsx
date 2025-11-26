@@ -5,6 +5,8 @@ import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import ThemeToggle from "./ThemeToggle";
+// 1. Import
+import NotificationDropdown from "./NotificationDropdown";
 
 const NavbarSeller = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -35,11 +37,15 @@ const NavbarSeller = () => {
               <Link
                 key={link.name}
                 href={link.href}
-                className="text-foreground hover:text-orange-primary font-medium transition-colors hover:text-orange-500"
+                className="text-foreground hover:text-orange-500 font-medium transition-colors"
               >
                 {link.name}
               </Link>
             ))}
+
+            {/* 2. Add Dropdown */}
+            <NotificationDropdown />
+
             <ThemeToggle />
             <button
               onClick={handleSignOut}
@@ -51,6 +57,9 @@ const NavbarSeller = () => {
 
           {/* Mobile */}
           <div className="md:hidden flex items-center space-x-2">
+            {/* 3. Add Dropdown */}
+            <NotificationDropdown />
+
             <ThemeToggle />
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -68,7 +77,7 @@ const NavbarSeller = () => {
             <Link
               key={link.name}
               href={link.href}
-              className="block text-card-foreground font-medium hover:text-orange-primary transition-colors hover:text-orange-500"
+              className="block text-card-foreground font-medium hover:text-orange-500 transition-colors"
               onClick={() => setMobileMenuOpen(false)}
             >
               {link.name}

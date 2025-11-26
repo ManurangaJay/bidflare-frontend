@@ -5,6 +5,8 @@ import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import ThemeToggle from "./ThemeToggle";
+// 1. Import the Dropdown
+import NotificationDropdown from "./NotificationDropdown";
 
 const NavbarBuyer = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -37,11 +39,15 @@ const NavbarBuyer = () => {
               <Link
                 key={link.name}
                 href={link.href}
-                className="text-foreground hover:text-orange-primary font-medium transition-colors hover:text-orange-500"
+                className="text-foreground hover:text-orange-500 font-medium transition-colors"
               >
                 {link.name}
               </Link>
             ))}
+
+            {/* 2. ADD NOTIFICATION DROPDOWN HERE */}
+            <NotificationDropdown />
+
             <ThemeToggle />
             <button
               onClick={handleSignOut}
@@ -53,6 +59,9 @@ const NavbarBuyer = () => {
 
           {/* Mobile Menu Toggle */}
           <div className="md:hidden flex items-center space-x-2">
+            {/* 3. ADD IT HERE TOO (For Mobile Top Bar) */}
+            <NotificationDropdown />
+
             <ThemeToggle />
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -64,14 +73,14 @@ const NavbarBuyer = () => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu (Expanded) */}
       {mobileMenuOpen && (
         <div className="md:hidden bg-card px-4 pb-4 space-y-2 shadow-sm dark:shadow-2xl">
           {buyerLinks.map((link) => (
             <Link
               key={link.name}
               href={link.href}
-              className="block text-card-foreground font-medium hover:text-orange-primary transition-colors hover:text-orange-500"
+              className="block text-card-foreground font-medium hover:text-orange-500 transition-colors"
               onClick={() => setMobileMenuOpen(false)}
             >
               {link.name}
