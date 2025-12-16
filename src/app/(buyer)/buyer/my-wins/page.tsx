@@ -8,6 +8,8 @@ import PaymentModal from "@/components/payment/PaymentModal";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 
+import ReviewModal from "@/components/ReviewModal";
+
 const CardSkeleton = () => (
   <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
     <div className="aspect-[4/3] w-full animate-pulse bg-muted"></div>
@@ -65,7 +67,12 @@ const PaginationControls = ({
 // --- Type Definitions ---
 type ItemStatus = "SOLD" | "PAID" | "SHIPPED" | "DELIVERED";
 type WonAuction = { id: string; productId: string; lastPrice: number };
-type Product = { id: string; title: string; status: ItemStatus };
+type Product = {
+  id: string;
+  title: string;
+  status: ItemStatus;
+  sellerId: string;
+};
 type WonItemWithProduct = Product & {
   auctionId: string;
   price: number;
@@ -98,6 +105,14 @@ export default function MyWinsPage() {
     price: number;
   } | null>(null);
 
+  // State for the review modal
+  const [itemToReview, setItemToReview] = useState<{
+    sellerId: string;
+    productTitle: string;
+    productId: string;
+  } | null>(null);
+  const isReviewModalOpen = !!itemToReview;
+
   // --- Data Fetching ---
   const fetchWonItems = useCallback(async () => {
     setIsLoading(true);
@@ -121,6 +136,7 @@ export default function MyWinsPage() {
               return null;
             }
             const product: Product = await productRes.json();
+            console.log("Debug: Product fetched:", product);
 
             let image = "https://placehold.co/600x400/EEE/31343C?text=No+Image";
             try {
@@ -131,9 +147,10 @@ export default function MyWinsPage() {
                 if (imageUrl) {
                   image = imageUrl.startsWith("http")
                     ? imageUrl
-                    : `http://localhost:8080${
-                        imageUrl.startsWith("/") ? "" : "/"
-                      }${imageUrl}`;
+                    : `${
+                        process.env.NEXT_PUBLIC_API_URL ||
+                        "http://localhost:8080"
+                      }${imageUrl.startsWith("/") ? "" : "/"}${imageUrl}`;
                 }
               }
             } catch {}
@@ -210,6 +227,14 @@ export default function MyWinsPage() {
     } finally {
       setUpdatingItemId(null);
     }
+  };
+
+  const handleWriteReview = (
+    sellerId: string,
+    productTitle: string,
+    productId: string
+  ) => {
+    setItemToReview({ sellerId, productTitle, productId });
   };
 
   const handlePageChange = (page: number) => {
@@ -314,6 +339,9 @@ export default function MyWinsPage() {
                 handlePayment(item.auctionId, item.title, item.price)
               }
               onMarkDelivered={() => handleMarkDelivered(item.id)}
+              onWriteReview={() =>
+                handleWriteReview(item.sellerId, item.title, item.id)
+              }
             />
           ))}
         </div>
@@ -382,6 +410,17 @@ export default function MyWinsPage() {
           auctionId={itemToPay.auctionId}
           itemTitle={itemToPay.title}
           price={itemToPay.price}
+        />
+      )}
+
+      {/* Review Modal */}
+      {isReviewModalOpen && (
+        <ReviewModal
+          isOpen={isReviewModalOpen}
+          onClose={() => setItemToReview(null)}
+          sellerId={itemToReview.sellerId}
+          productTitle={itemToReview.productTitle}
+          productId={itemToReview.productId}
         />
       )}
     </div>

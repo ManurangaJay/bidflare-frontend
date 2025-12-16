@@ -12,6 +12,7 @@ type ProductCardProps = {
   createdAt: string;
   isUpdating?: boolean;
   onMarkAsShipped?: () => void;
+  onSeeReviews?: () => void;
 };
 
 const isValidDate = (date: Date) => !isNaN(date.getTime());
@@ -34,6 +35,7 @@ const ProductCard = ({
   createdAt,
   isUpdating = false,
   onMarkAsShipped,
+  onSeeReviews,
 }: ProductCardProps) => {
   const safeStartingPrice =
     typeof startingPrice === "number" ? startingPrice : 0;
@@ -104,6 +106,15 @@ const ProductCard = ({
             >
               Manage Auction →
             </Link>
+          )}
+
+          {status === "DELIVERED" && onSeeReviews && (
+            <button
+              onClick={onSeeReviews}
+              className="w-full flex items-center justify-center rounded-lg bg-blue-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-blue-600"
+            >
+              See Reviews
+            </button>
           )}
         </div>
       </div>

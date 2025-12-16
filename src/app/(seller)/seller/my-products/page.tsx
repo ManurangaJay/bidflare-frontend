@@ -7,6 +7,7 @@ import { authFetch } from "../../../../../lib/authFetch";
 import RoleGuard from "@/components/RoleGuard";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import ShowReviewsModal from "@/components/ShowReviewsModal";
 
 type Product = {
   id: string;
@@ -38,6 +39,8 @@ export default function SellerProductsPage() {
   const [updatingProductId, setUpdatingProductId] = useState<string | null>(
     null
   );
+  const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
+  const [isReviewsModalOpen, setIsReviewsModalOpen] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -110,6 +113,11 @@ export default function SellerProductsPage() {
     } finally {
       setUpdatingProductId(null);
     }
+  };
+
+  const handleSeeReviews = (productId: string) => {
+    setSelectedProductId(productId);
+    setIsReviewsModalOpen(true);
   };
 
   const filteredProducts = useMemo(
@@ -221,6 +229,7 @@ export default function SellerProductsPage() {
                   {...product}
                   isUpdating={updatingProductId === product.id}
                   onMarkAsShipped={() => handleMarkAsShipped(product.id)}
+                  onSeeReviews={() => handleSeeReviews(product.id)}
                 />
               ))}
             </div>
@@ -239,6 +248,13 @@ export default function SellerProductsPage() {
           )}
         </div>
       </div>
+      {selectedProductId && (
+        <ShowReviewsModal
+          isOpen={isReviewsModalOpen}
+          onClose={() => setIsReviewsModalOpen(false)}
+          productId={selectedProductId}
+        />
+      )}
     </RoleGuard>
   );
 }

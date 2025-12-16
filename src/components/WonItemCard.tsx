@@ -10,6 +10,7 @@ type WonItemCardProps = {
   isUpdating: boolean;
   onPay: () => void;
   onMarkDelivered: () => void;
+  onWriteReview: () => void;
 };
 
 // Helper to define styles for each status badge, making it easily extensible
@@ -54,6 +55,7 @@ export default function WonItemCard({
   isUpdating,
   onPay,
   onMarkDelivered,
+  onWriteReview,
 }: WonItemCardProps) {
   const statusStyle =
     statusStyles[status] || "bg-gray-100 text-gray-800 ring-gray-600/20";
@@ -98,6 +100,14 @@ export default function WonItemCard({
               className="flex w-full items-center justify-center rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:bg-muted"
             >
               {isUpdating ? <SpinnerIcon /> : "Mark as Delivered"}
+            </button>
+          )}
+          {status === "DELIVERED" && (
+            <button
+              onClick={onWriteReview}
+              className="flex w-full items-center justify-center rounded-lg bg-orange-500 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
+            >
+              Review the Seller
             </button>
           )}
         </div>
