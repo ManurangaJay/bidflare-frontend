@@ -169,9 +169,13 @@ export default function MyWinsPage() {
       const finalItems = enrichedItems.filter(Boolean) as WonItemWithProduct[];
       console.log("Debug: Enriched items ready for display:", finalItems);
       setItems(finalItems);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Debug: Error in fetchWonItems:", err);
-      setError(err.message);
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("An unknown error occurred.");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -219,10 +223,14 @@ export default function MyWinsPage() {
       if (!res.ok) throw new Error("Failed to confirm delivery.");
 
       toast.success("Enjoy your new item! Delivery confirmed.");
-    } catch (err: any) {
-      toast.error(
-        err.message || "Could not confirm delivery. Please try again."
-      );
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        toast.error(
+          err.message || "Could not confirm delivery. Please try again."
+        );
+      } else {
+        toast.error("An unexpected error occurred. Please try again.");
+      }
       setItems(originalItems);
     } finally {
       setUpdatingItemId(null);

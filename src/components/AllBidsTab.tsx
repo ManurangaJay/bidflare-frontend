@@ -10,7 +10,7 @@ export default function AllBidsTab({ bids, userId }: TabProps) {
   if (bids.length === 0) {
     return (
       <div className="text-center py-10 text-muted-foreground">
-        You haven't placed any bids yet.
+        You haven&apos;t placed any bids yet.
       </div>
     );
   }

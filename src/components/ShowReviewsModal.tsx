@@ -1,7 +1,5 @@
 "use client";
 
-import { Dialog } from "@headlessui/react";
-import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { authFetch } from "../../lib/authFetch";
 import { toast } from "sonner";
@@ -40,9 +38,14 @@ export default function ShowReviewsModal({
           }
           const data = await res.json();
           setReviews(data);
-        } catch (err: any) {
-          setError(err.message);
-          toast.error(err.message);
+        } catch (err: unknown) {
+          if (err instanceof Error) {
+            setError(err.message);
+            toast.error(err.message);
+          } else {
+            setError("An unexpected error occurred.");
+            toast.error("An unexpected error occurred.");
+          }
         } finally {
           setLoading(false);
         }

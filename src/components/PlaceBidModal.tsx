@@ -60,8 +60,12 @@ export default function PlaceBidModal({
       setAmount("");
       onClose();
       onSuccess?.();
-    } catch (err: any) {
-      toast.error("Failed to place bid: " + err.message); // ✅ Show error as toast
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        toast.error("Failed to place bid: " + err.message); // ✅ Show error as toast
+      } else {
+        toast.error("An unexpected error occurred while placing bid.");
+      }
     } finally {
       setLoading(false);
     }

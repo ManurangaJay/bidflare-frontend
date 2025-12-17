@@ -1,8 +1,7 @@
-"use client";
-
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { formatDistanceToNowStrict, isAfter, isBefore } from "date-fns";
-import { Heart, HeartOff } from "lucide-react";
+import { Heart } from "lucide-react";
 import { authFetch } from "../../lib/authFetch";
 
 type AuctionCardProps = {
@@ -122,9 +121,11 @@ const AuctionCard = ({
       className="bg-card rounded-2xl shadow-2xl hover:shadow-lg transition overflow-hidden cursor-pointer relative"
     >
       <div className="relative">
-        <img
+        <Image
           src={image || "/images/default.jpg"}
           alt={title}
+          width={300}
+          height={192}
           className="w-full h-48 object-contain rounded-t-2xl bg-card"
         />
 

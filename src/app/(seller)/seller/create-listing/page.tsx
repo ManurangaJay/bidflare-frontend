@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { getApiUrl } from "../../../../../lib/api";
 import { authFetch } from "../../../../../lib/authFetch";
 import RoleGuard from "@/components/RoleGuard";
 
@@ -95,8 +94,12 @@ const CreateListing = () => {
       if (!auctionRes.ok) throw new Error("Auction creation failed");
 
       router.push("/seller/my-products");
-    } catch (err: any) {
-      setError(err.message || "Unexpected error");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("An unexpected error occurred.");
+      }
     } finally {
       setLoading(false);
     }

@@ -58,9 +58,14 @@ export default function MyBidsPage() {
         );
 
         setBids(enriched);
-      } catch (err: any) {
-        console.error(err);
-        toast.error("Could not load your bids.");
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          console.error(err);
+          toast.error(err.message);
+        } else {
+          console.error("An unexpected error occurred:", err);
+          toast.error("Could not load your bids.");
+        }
       } finally {
         setLoading(false);
       }

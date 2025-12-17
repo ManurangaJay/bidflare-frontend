@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import AuctionCard from "@/components/AuctionCard";
 import { Spinner } from "@/components/ui/Spinner";
 import { authFetch } from "../../../../../lib/authFetch";
+import Image from "next/image";
 
 type WatchlistItem = {
   id: string;
@@ -109,7 +110,7 @@ export default function WatchlistPage() {
     };
 
     loadWatchlist();
-  }, []);
+  }, [router]);
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
@@ -117,7 +118,7 @@ export default function WatchlistPage() {
         My watchlist
       </h1>
       <p className="text-gray-500 text-center mb-10 max-w-xl mx-auto">
-        Auctions you've saved for later. Stay competitive and don’t miss out!
+        Auctions you&apos;ve saved for later. Stay competitive and don&apos;t miss out!
       </p>
 
       {loading ? (
@@ -126,9 +127,11 @@ export default function WatchlistPage() {
         </div>
       ) : cards.length === 0 ? (
         <div className="text-center mt-12 space-y-6">
-          <img
+          <Image
             src="/images/empty-watchlist.png"
             alt="Empty watchlist"
+            width={160}
+            height={160}
             className="mx-auto w-40 h-40 opacity-60"
             onError={(e) => (e.currentTarget.style.display = "none")}
           />
@@ -137,7 +140,7 @@ export default function WatchlistPage() {
             Your watchlist is empty
           </h2>
           <p className="text-gray-500 max-w-md mx-auto">
-            Looks like you haven’t saved any auctions yet. Browse our listings
+            Looks like you haven&apos;t saved any auctions yet. Browse our listings
             and keep an eye on the items you love!
           </p>
 
@@ -154,17 +157,17 @@ export default function WatchlistPage() {
             </h3>
             <ul className="space-y-6 text-gray-600 text-sm sm:text-base text-center">
               <li>
-                <p>Browse the auctions by clicking "Browse Auctions" above.</p>
+                <p>Browse the auctions by clicking &quot;Browse Auctions&quot; above.</p>
                 <div className="text-orange-500 mt-2 text-2xl">↓</div>
               </li>
               <li>
-                <p>Find an auction you're interested in.</p>
+                <p>Find an auction you&apos;re interested in.</p>
                 <div className="text-orange-500 mt-2 text-2xl">↓</div>
               </li>
               <li>
                 <p>
                   Click the <span className="font-semibold">heart</span> or{" "}
-                  <span className="font-semibold">"watchlist"</span> button on
+                  <span className="font-semibold">&quot;watchlist&quot;</span> button on
                   the auction card.
                 </p>
                 <div className="text-orange-500 mt-2 text-2xl">↓</div>

@@ -61,8 +61,12 @@ export default function RegisterPage() {
 
       // Redirect to homepage
       window.location.href = "/";
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("An unexpected error occurred.");
+      }
     }
   };
 
@@ -150,7 +154,7 @@ export default function RegisterPage() {
                 }`}
                 style={{ transition: "all 0.5s ease-in-out" }}
               >
-                <div className="font-medium">I'm here to Bid</div>
+                <div className="font-medium">I&apos;m here to Bid</div>
                 <div className="text-sm">Participate in auctions</div>
               </button>
 
@@ -164,7 +168,7 @@ export default function RegisterPage() {
                 }`}
                 style={{ transition: "all 0.5s ease-in-out" }}
               >
-                <div className="font-medium">I'm here to Sell</div>
+                <div className="font-medium">I&apos;m here to Sell</div>
                 <div className="text-sm">Create and manage auctions</div>
               </button>
             </div>

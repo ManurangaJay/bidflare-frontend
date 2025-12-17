@@ -74,8 +74,12 @@ export default function SellerProductsPage() {
         );
 
         setProducts(enrichedProducts);
-      } catch (err: any) {
-        setError(err.message || "Unexpected error");
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("An unexpected error occurred.");
+        }
       } finally {
         setLoading(false);
       }
@@ -105,10 +109,14 @@ export default function SellerProductsPage() {
         body: JSON.stringify({ status: "SHIPPED" }),
       });
       if (!res.ok) throw new Error("Failed to update product status.");
-    } catch (err: any) {
-      toast.error(
-        err.message || "Could not mark as shipped. Reverting change."
-      );
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        toast.error(
+          err.message || "Could not mark as shipped. Reverting change."
+        );
+      } else {
+        toast.error("An unknown error occurred. Reverting change.");
+      }
       setProducts(originalProducts); // Revert on failure
     } finally {
       setUpdatingProductId(null);

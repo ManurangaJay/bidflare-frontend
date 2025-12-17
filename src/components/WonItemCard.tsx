@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 
 type WonItemCardProps = {
   title: string;
@@ -11,16 +12,6 @@ type WonItemCardProps = {
   onPay: () => void;
   onMarkDelivered: () => void;
   onWriteReview: () => void;
-};
-
-// Helper to define styles for each status badge, making it easily extensible
-const statusStyles: Record<WonItemCardProps["status"], string> = {
-  SOLD: "bg-yellow-100 text-yellow-800 ring-yellow-600/20 dark:bg-yellow-900/30 dark:text-yellow-300",
-  PAID: "bg-blue-100 text-blue-800 ring-blue-600/20 dark:bg-blue-900/30 dark:text-blue-300",
-  SHIPPED:
-    "bg-indigo-100 text-indigo-800 ring-indigo-600/20 dark:bg-indigo-900/30 dark:text-indigo-300",
-  DELIVERED:
-    "bg-green-100 text-green-800 ring-green-600/20 dark:bg-green-900/30 dark:text-green-300",
 };
 
 // A simple spinner icon for the loading state on buttons
@@ -57,15 +48,14 @@ export default function WonItemCard({
   onMarkDelivered,
   onWriteReview,
 }: WonItemCardProps) {
-  const statusStyle =
-    statusStyles[status] || "bg-gray-100 text-gray-800 ring-gray-600/20";
-
   return (
     <div className="group flex h-full flex-col overflow-hidden rounded-2xl bg-card shadow-xl transition-all duration-300 ease-in-out hover:shadow-md  dark: hover:shadow-gray-800 hover:-translate-y-1">
       <div className="relative overflow-hidden">
-        <img
+        <Image
           src={image}
           alt={title}
+          width={300}
+          height={192}
           className="w-full h-48 object-contain rounded-t-2xl bg-card transition-transform duration-300 group-hover:scale-105"
         />
         {/* <span

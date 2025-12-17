@@ -59,8 +59,12 @@ export function AddressSection() {
       if (!res.ok) throw new Error("Failed to fetch addresses.");
       const data: Address[] = await res.json();
       setAddresses(data);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("An unknown error occurred.");
+      }
       toast.error("Could not load your addresses.");
     } finally {
       setLoading(false);
@@ -129,8 +133,12 @@ export function AddressSection() {
       );
       setIsFormOpen(false);
       fetchAddresses(); // Refresh the list
-    } catch (err: any) {
-      toast.error(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        toast.error("An unknown error occurred.");
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -148,8 +156,12 @@ export function AddressSection() {
       if (!res.ok) throw new Error("Failed to delete address.");
       toast.success("Address deleted successfully.");
       fetchAddresses(); // Refresh the list
-    } catch (err: any) {
-      toast.error(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        toast.error("An unknown error occurred.");
+      }
     }
   };
 
@@ -162,8 +174,12 @@ export function AddressSection() {
       if (!res.ok) throw new Error("Failed to set default address.");
       toast.success("Default address updated.");
       fetchAddresses(); // Refresh the list
-    } catch (err: any) {
-      toast.error(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        toast.error("An unknown error occurred.");
+      }
     }
   };
 
@@ -251,7 +267,7 @@ export function AddressSection() {
           <div className="text-center py-8">
             <MapPin className="mx-auto text-muted-foreground" size={40} />
             <p className="mt-2 text-muted-foreground">
-              You haven't added any addresses yet.
+              You haven&apos;t added any addresses yet.
             </p>
           </div>
         )}

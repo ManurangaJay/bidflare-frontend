@@ -1,13 +1,13 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useParams } from "next/navigation";
-import { formatDistanceToNowStrict } from "date-fns";
 import { ClockIcon, TagIcon } from "lucide-react";
 import { authFetch } from "../../../../../../lib/authFetch";
 import BidsList from "@/components/BidsList";
 import PlaceBidModal from "@/components/PlaceBidModal";
 import { getUserFromToken } from "../../../../../../utils/getUserFromToken";
 import { toast } from "sonner";
+import Image from "next/image";
 
 type AuctionResponseDto = {
   id: string;
@@ -53,21 +53,20 @@ export default function AuctionDetailPage() {
   const bidderId = user?.userId ?? "";
   const [bids, setBids] = useState<BidDto[]>([]);
 
-  const fetchBids = async () => {
+  const fetchBids = useCallback(async () => {
+    if (!auction?.id) return;
     try {
-      const res = await authFetch(`/bids/auction/${auction?.id}`);
+      const res = await authFetch(`/bids/auction/${auction.id}`);
       const bidData: BidDto[] = await res.json();
       setBids(bidData);
     } catch (error) {
       console.error("Error fetching bids:", error);
     }
-  };
+  }, [auction?.id]);
 
   useEffect(() => {
-    if (auction?.id) {
-      fetchBids();
-    }
-  }, [auction?.id]);
+    fetchBids();
+  }, [fetchBids]);
 
   useEffect(() => {
     if (!id) return;
@@ -157,9 +156,11 @@ export default function AuctionDetailPage() {
         {/* Product Image + Info */}
         <div className="grid md:grid-cols-2 gap-6 items-start">
           {/* Image */}
-          <img
+          <Image
             src={imageUrl}
             alt={product.title}
+            width={600}
+            height={400}
             className="w-full h-auto rounded-2xl shadow-2xl"
           />
 

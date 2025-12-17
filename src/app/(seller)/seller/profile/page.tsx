@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { toast } from "sonner";
 import {
   Pencil,
@@ -74,8 +74,12 @@ export default function ProfilePage() {
         email: data.email,
         profileImage: data.profileImage,
       });
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("An unknown error occurred.");
+      }
       toast.error("Failed to load your profile.");
     } finally {
       setLoading(false);
@@ -115,8 +119,12 @@ export default function ProfilePage() {
           field.charAt(0).toUpperCase() + field.slice(1)
         } updated successfully.`
       );
-    } catch (err: any) {
-      toast.error(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        toast.error(`An unknown error occurred while updating ${field}.`);
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -169,8 +177,12 @@ export default function ProfilePage() {
       toast.success("Password updated successfully!");
       setIsResettingPassword(false);
       setPasswordData({ newPassword: "", confirmPassword: "" });
-    } catch (err: any) {
-      toast.error(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        toast.error("An unknown error occurred while updating password.");
+      }
     } finally {
       setIsPasswordSubmitting(false);
     }

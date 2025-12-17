@@ -84,8 +84,12 @@ export default function AuctionsPage() {
         );
 
         setAuctions(enriched.filter(Boolean) as AuctionWithProduct[]);
-      } catch (err: any) {
-        setError(err.message || "Unexpected error");
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("An unexpected error occurred.");
+        }
       } finally {
         setLoading(false);
       }
@@ -113,7 +117,7 @@ export default function AuctionsPage() {
         🔥 Live & Upcoming Auctions
       </h1>
       <p className="text-muted-foreground text-center mb-10 max-w-xl mx-auto">
-        Browse all auctions currently open for bidding or starting soon. Don't
+        Browse all auctions currently open for bidding or starting soon. Don&apos;t
         miss your chance!
       </p>
 

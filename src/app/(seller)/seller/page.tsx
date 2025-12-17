@@ -13,7 +13,6 @@ export default function SellerHomepage() {
     if (user?.name) {
       setUserName(user.name);
     }
-    console.log(userName);
   }, []);
 
   return (

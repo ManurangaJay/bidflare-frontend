@@ -81,8 +81,12 @@ export default function MyAuctionsPage() {
         const results = await Promise.all(auctionPromises);
         const allAuctions = results.flat();
         setAuctions(allAuctions);
-      } catch (err: any) {
-        setError(err.message || "Unexpected error");
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("An unexpected error occurred.");
+        }
       } finally {
         setLoading(false);
       }

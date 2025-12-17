@@ -69,8 +69,12 @@ export default function BuyerHomepage() {
         );
 
         setAuctions(enriched.filter(Boolean) as AuctionWithProduct[]);
-      } catch (err: any) {
-        setError(err.message || "Unexpected error");
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("An unexpected error occurred.");
+        }
       } finally {
         setLoading(false);
       }

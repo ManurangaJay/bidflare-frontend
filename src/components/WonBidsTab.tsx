@@ -10,7 +10,7 @@ export default function WonBidsTab({ bids, userId }: TabProps) {
   if (bids.length === 0) {
     return (
       <div className="text-center py-10 text-muted-foreground">
-        You haven't won any auctions yet. Keep bidding! 🎉
+        You haven&apos;t won any auctions yet. Keep bidding! 🎉
       </div>
     );
   }

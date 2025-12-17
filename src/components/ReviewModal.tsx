@@ -109,11 +109,17 @@ export default function ReviewModal({
         throw new Error(errorData.message || "Failed to submit review.");
       }
 
+;
       toast.success("Thank you! Your review has been submitted.");
       onClose();
-    } catch (err: any) {
-      setError(err.message || "An unexpected error occurred.");
-      toast.error(err.message || "Could not submit review.");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message || "An unexpected error occurred.");
+        toast.error(err.message || "Could not submit review.");
+      } else {
+        setError("An unexpected error occurred.");
+        toast.error("Could not submit review.");
+      }
     } finally {
       setIsLoading(false);
     }
