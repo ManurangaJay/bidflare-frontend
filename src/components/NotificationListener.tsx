@@ -37,7 +37,10 @@ export default function NotificationListener() {
     // 1. Configure the Client
     const client = new Client({
       // We use SockJS as a factory because standard ws:// might get blocked
-      webSocketFactory: () => new SockJS("http://localhost:8080/ws"),
+      webSocketFactory: () => {
+        const url = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+        return new SockJS(`${url}/ws`);
+      },
 
       onConnect: () => {
         console.log("✅ Connected to WebSocket");

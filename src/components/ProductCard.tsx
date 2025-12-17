@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import { formatDistanceToNow } from "date-fns";
 import { Loader2 } from "lucide-react";
 
@@ -45,7 +44,7 @@ const ProductCard = ({
   return (
     <div className="bg-card rounded-2xl shadow-2xl hover:shadow-lg transition overflow-hidden ">
       <div className="relative">
-        <Image
+        <img
           src={image || "/images/default.jpg"}
           alt={title}
           width={300}

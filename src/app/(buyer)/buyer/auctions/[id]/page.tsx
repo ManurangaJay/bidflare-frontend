@@ -7,7 +7,6 @@ import BidsList from "@/components/BidsList";
 import PlaceBidModal from "@/components/PlaceBidModal";
 import { getUserFromToken } from "../../../../../../utils/getUserFromToken";
 import { toast } from "sonner";
-import Image from "next/image";
 
 type AuctionResponseDto = {
   id: string;
@@ -90,9 +89,9 @@ export default function AuctionDetailPage() {
           const imageData = await imageRes.json();
           let img = imageData?.[0]?.imageUrl;
           if (img && !img.startsWith("http")) {
-            img = `http://localhost:8080${
-              img.startsWith("/") ? "" : "/"
-            }${img}`;
+            img = `${
+              process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080"
+            }${img.startsWith("/") ? "" : "/"}${img}`;
           }
           if (img) setImageUrl(img);
         }
@@ -156,7 +155,7 @@ export default function AuctionDetailPage() {
         {/* Product Image + Info */}
         <div className="grid md:grid-cols-2 gap-6 items-start">
           {/* Image */}
-          <Image
+          <img
             src={imageUrl}
             alt={product.title}
             width={600}

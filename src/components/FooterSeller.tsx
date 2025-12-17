@@ -6,9 +6,9 @@ import { Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
 const FooterSeller = () => {
   const quickLinks = [
     { name: "Home", href: "/" },
-    { name: "My Products", href: "/seller/products" },
-    { name: "Create Listing", href: "/seller/create" },
-    { name: "My Auctions", href: "/seller/auctions" },
+    { name: "My Products", href: "/seller/my-products" },
+    { name: "Create Listing", href: "/seller/create-listing" },
+    { name: "My Auctions", href: "/seller/my-auctions" },
     { name: "Analytics", href: "/seller/analytics" },
     { name: "Profile", href: "/seller/profile" },
     { name: "Contact Us", href: "/seller/contact" },

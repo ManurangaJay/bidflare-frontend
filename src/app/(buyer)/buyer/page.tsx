@@ -54,9 +54,9 @@ export default function BuyerHomepage() {
                   const imageData = await imageRes.json();
                   image = imageData[0]?.imageUrl || image;
                   if (!image.startsWith("http")) {
-                    image = `http://localhost:8080${
-                      image.startsWith("/") ? "" : "/"
-                    }${image}`;
+                    image = `${
+                      process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080"
+                    }${image.startsWith("/") ? "" : "/"}${image}`;
                   }
                 }
               } catch {}

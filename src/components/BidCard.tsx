@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { format } from "date-fns";
 import { Bid } from "../../types";
 
@@ -38,7 +37,7 @@ export default function BidCard({ bid, userId }: BidCardProps) {
       className="bg-card rounded-2xl shadow-2xl p-4 md:p-6 flex flex-col md:flex-row gap-4 items-center transition-transform duration-500 hover:scale-[1.02] "
     >
       <div className="w-full md:w-1/3 relative">
-        <Image
+        <img
           src={bid.image || "/placeholder.png"}
           alt={bid.product.title}
           width={300}

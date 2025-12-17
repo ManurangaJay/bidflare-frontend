@@ -62,9 +62,9 @@ export default function SellerProductsPage() {
 
               const imageUrl = rawUrl?.startsWith("http")
                 ? rawUrl
-                : `http://localhost:8080${
-                    rawUrl?.startsWith("/") ? "" : "/"
-                  }${rawUrl}`;
+                : `${
+                    process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080"
+                  }${rawUrl?.startsWith("/") ? "" : "/"}${rawUrl}`;
 
               return { ...product, image: imageUrl || "/images/default.jpg" };
             } catch {

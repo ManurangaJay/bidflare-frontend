@@ -63,7 +63,10 @@ export default function AuctionsPage() {
                     if (imageUrl) {
                       image = imageUrl.startsWith("http")
                         ? imageUrl
-                        : `http://localhost:8080${
+                        : `${
+                            process.env.NEXT_PUBLIC_API_URL ||
+                            "http://localhost:8080"
+                          }${
                             imageUrl.startsWith("/") ? "" : "/"
                           }${imageUrl}`;
                     }

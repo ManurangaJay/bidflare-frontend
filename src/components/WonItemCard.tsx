@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
 
 type WonItemCardProps = {
   title: string;
@@ -51,7 +50,7 @@ export default function WonItemCard({
   return (
     <div className="group flex h-full flex-col overflow-hidden rounded-2xl bg-card shadow-xl transition-all duration-300 ease-in-out hover:shadow-md  dark: hover:shadow-gray-800 hover:-translate-y-1">
       <div className="relative overflow-hidden">
-        <Image
+        <img
           src={image}
           alt={title}
           width={300}
