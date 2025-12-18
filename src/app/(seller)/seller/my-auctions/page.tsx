@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import AuctionCard from "@/components/AuctionCard";
+import SellerAuctionCard from "@/components/SellerAuctionCard";
 import { Loader2 } from "lucide-react";
 import { authFetch } from "../../../../../lib/authFetch";
 import RoleGuard from "@/components/RoleGuard";
@@ -143,7 +143,7 @@ export default function MyAuctionsPage() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {auctions.map((auction) => (
-            <AuctionCard
+            <SellerAuctionCard
               key={auction.id}
               id={auction.id}
               title={auction.title}
